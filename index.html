@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NOEL TRADER - Top 25 FIX 2</title>
+<title>NOEL TRADER - Top 25 FIX 3 DEBUG</title>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -44,7 +44,7 @@ button.main{width:100%;padding:15px;border:none;border-radius:12px;font-weight:9
 input{width:100%;background:#0b0d12;border:1px solid #333;color:#fff;padding:12px;border-radius:10px;margin-top:4px;font-size:16px}
 label{font-size:12px;color:#888}
 .list{font-size:14px;line-height:1.7}
-.debug{background:#000;border:1px solid #ffca28;border-radius:10px;padding:10px;font-size:11px;white-space:pre-wrap;max-height:120px;overflow:auto;color:#ffca28}
+.debug{background:#000;border:1px solid #ff5252;border-radius:10px;padding:10px;font-size:12px;white-space:pre-wrap;max-height:220px;overflow:auto;color:#ffca28}
 .small{font-size:12px;color:#888;text-align:center;margin-top:6px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 td,th{padding:7px 4px;border-bottom:1px solid #222;text-align:left}
@@ -53,7 +53,7 @@ td,th{padding:7px 4px;border-bottom:1px solid #222;text-align:left}
 </head>
 <body>
 
-<header><h1>NOEL <span>TRADER</span></h1><p>Top 25 • FIX 2 - alles ausgeschrieben</p></header>
+<header><h1>NOEL <span>TRADER</span></h1><p>Top 25 • FIX 3 - zeigt jeden Fehler im Debug an</p></header>
 
 <div class="card"><h2>🪙 Top 25 - deine Liste</h2>
 <div class="pills" id="coinPills">
@@ -123,9 +123,15 @@ td,th{padding:7px 4px;border-bottom:1px solid #222;text-align:left}
 
 <div class="card"><h2>📝 Dein Einstieg</h2><label>Einstiegspreis (Komma geht: 2,6)</label><input id="myEntry" value=""><button class="main blue" onclick="calc()">📊 ANALYSE BERECHNEN</button><div class="small" id="myPnl"></div></div>
 
-<div class="card"><h2>🔧 Debug</h2><div class="debug" id="dbg">Starte...</div><button class="main" style="background:#ffca28;color:#000" onclick="testSources()">🔧 QUELLEN TESTEN</button></div>
+<div class="card"><h2>🔧 Debug - hier steht jetzt jeder Fehler</h2><div class="debug" id="dbg">Starte...</div><button class="main" style="background:#ffca28;color:#000" onclick="testSources()">🔧 QUELLEN TESTEN</button></div>
 
 <script>
+// JEDER Fehler wird jetzt im Debug-Feld angezeigt, statt still abzustürzen
+var dbgEl = document.getElementById('dbg');
+function showErr(msg){ if(dbgEl){ dbgEl.textContent = dbgEl.textContent + '\nFEHLER: ' + msg; } }
+window.onerror = function(m, src, line){ showErr(m + ' Zeile ' + line); return false; };
+window.addEventListener('unhandledrejection', function(e){ showErr('Promise: ' + (e.reason && e.reason.message ? e.reason.message : e.reason)); });
+
 var $=function(id){return document.getElementById(id);};
 var COINS=[
  {s:'BTC',n:'Bitcoin',rank:1,grp:'A'},
@@ -164,7 +170,7 @@ function num(v){if(v==null)return 0;var s=String(v).trim().replace(/\s/g,'');if(
 function dec(c){if(c==='XLM')return 4;if(c==='SHIB')return 8;if(c==='DOGE')return 4;if(c==='XRP')return 4;if(c==='ADA')return 4;if(c==='TRX')return 4;if(c==='ZEC')return 2;if(c==='BTC')return 0;if(c==='ETH')return 0;if(c==='BCH')return 2;if(c==='HBAR')return 4;if(c==='CRO')return 4;if(c==='SUI')return 3;if(c==='NEAR')return 3;if(c==='TAO')return 1;if(c==='UNI')return 3;if(c==='LINK')return 3;if(c==='AVAX')return 2;if(c==='SOL')return 2;if(c==='BNB')return 2;if(c==='TON')return 3;if(c==='LTC')return 2;if(c==='HYPE')return 2;if(c==='LEO')return 2;if(c==='XMR')return 2;return 3;}
 function tfLabel(t){if(t==='15m')return '15M';if(t==='1h')return '1H';if(t==='1d')return '1D';if(t==='1w')return '1W';return '1M';}
 function coinInfo(c){for(var i=0;i<COINS.length;i++){if(COINS[i].s===c)return COINS[i];}return {n:c,rank:'-',grp:'-'};}
-function log(m){dbgLines.push(m);if(dbgLines.length>30)dbgLines.shift();$('dbg').textContent=dbgLines.join('\n');}
+function log(m){dbgLines.push(m);if(dbgLines.length>40)dbgLines.shift();$('dbg').textContent=dbgLines.join('\n');}
 function fmt(n){return n.toFixed(dec(coin))+' $';}
 function rsiCalc(c,p){var g=0,l=0;for(var i=1;i<=p;i++){var d=c[i]-c[i-1];if(d>=0)g+=d;else l+=-d;}var ag=g/p,al=l/p;for(var i=p+1;i<c.length;i++){var d=c[i]-c[i-1];ag=(ag*(p-1)+(d>0?d:0))/p;al=(al*(p-1)+(d<0?-d:0))/p;}if(al===0)return 100;if(ag===0)return 0;return 100-(100/(1+ag/al));}
 function ema(d,p){var k=2/(p+1),e=0;for(var i=0;i<p;i++)e+=d[i];e/=p;for(var i=p;i<d.length;i++)e=d[i]*k+e*(1-k);return e;}
@@ -172,8 +178,8 @@ function markActive(){
  var a=document.querySelectorAll('[data-coin]');for(var i=0;i<a.length;i++){if(a[i].dataset.coin===coin)a[i].classList.add('active');else a[i].classList.remove('active');}
  var b=document.querySelectorAll('[data-tf]');for(var j=0;j<b.length;j++){if(b[j].dataset.tf===tf)b[j].classList.add('active');else b[j].classList.remove('active');}
 }
-function pickCoin(c){coin=c;markActive();syncHeads();load();}
-function pickTf(t){tf=t;countdown={'15m':60,'1h':300,'1d':1800,'1w':3600,'1M':86400}[t];markActive();syncHeads();load();}
+function pickCoin(c){ try{ log('Klick Coin: '+c); coin=c;markActive();syncHeads();load(); }catch(e){ log('FEHLER pickCoin: '+e.message); } }
+function pickTf(t){ try{ log('Klick TF: '+t); tf=t;countdown={'15m':60,'1h':300,'1d':1800,'1w':3600,'1M':86400}[t];markActive();syncHeads();load(); }catch(e){ log('FEHLER pickTf: '+e.message); } }
 function syncHeads(){
  var inf=coinInfo(coin);
  $('rsiHead').textContent=tfLabel(tf)+' - '+coin+' (#'+inf.rank+' • '+inf.n+')';
@@ -189,14 +195,12 @@ async function fetchJson(url){
  }catch(e){log('FEHLER '+url.slice(0,50)+' -> '+e.message);return null;}
 }
 async function getKlines(sym, interval, gran){
- // 1. Binance
  var d=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+sym+'&interval='+interval+'&limit=500');
  if(Array.isArray(d)&&d.length>=30){
   var out=[];
   for(var i=0;i<d.length;i++){var k=d[i];out.push({time:Math.floor(k[0]/1000),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),vol:Number(k[5])});}
   return {src:'Binance',data:out};
  }
- // 2. Coinbase
  var base=sym.replace('USDT','');
  var cb=await fetchJson('https://api.exchange.coinbase.com/products/'+base+'-USD/candles?granularity='+gran);
  if(Array.isArray(cb)&&cb.length>=30){
@@ -204,7 +208,6 @@ async function getKlines(sym, interval, gran){
   for(var j=0;j<rev.length;j++){var q=rev[j];out2.push({time:q[0],open:q[3],high:q[2],low:q[1],close:q[4],vol:q[5]});}
   return {src:'Coinbase',data:out2};
  }
- // 3. Kraken - wichtig für XMR / LEO
  var krakenMap={BTC:'XBTUSD',ETH:'ETHUSD',XRP:'XRPUSD',SOL:'SOLUSD',DOGE:'DOGEUSD',ADA:'ADAUSD',LINK:'LINKUSD',BCH:'BCHUSD',LTC:'LTCUSD',AVAX:'AVAXUSD',NEAR:'NEARUSD',UNI:'UNIUSD',XMR:'XMRUSD',ZEC:'ZECUSD',XLM:'XLMUSD',HBAR:'HBARUSD',SUI:'SUIUSD',TAO:'TAOUSD',TRX:'TRXUSD',BNB:'BNBUSD',TON:'TONUSD',CRO:'CROUSD',SHIB:'SHIBUSD',HYPE:'HYPEUSD',LEO:'LEOUSD'};
  var kp=krakenMap[base]||base+'USD';
  var krInterval=gran<=900?15:gran<=3600?60:gran<=86400?1440:10080;
@@ -215,11 +218,13 @@ async function getKlines(sym, interval, gran){
  return {src:'-',data:[]};
 }
 async function testSources(){
- dbgLines=[];log('Teste '+coin+'...');
- var b=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+coin+'USDT&interval=1d&limit=5');
- log(b?'OK Binance ('+b.length+')':'FEHLER Binance');
- var cb=await fetchJson('https://api.exchange.coinbase.com/products/'+coin+'-USD/candles?granularity=86400');
- log(cb?'OK Coinbase':'FEHLER Coinbase');
+ try{
+  dbgLines=[];log('Teste '+coin+'...');
+  var b=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+coin+'USDT&interval=1d&limit=5');
+  log(b?'OK Binance ('+b.length+')':'FEHLER Binance');
+  var cb=await fetchJson('https://api.exchange.coinbase.com/products/'+coin+'-USD/candles?granularity=86400');
+  log(cb?'OK Coinbase':'FEHLER Coinbase');
+ }catch(e){ log('FEHLER testSources: '+e.message); }
 }
 function calcFibo(high,low,up){
  var d=high-low;var L={};
@@ -241,6 +246,7 @@ function zigzag(c,pct){
  z.push(dir>=0?{i:lhi,p:lh,t:'H'}:{i:lli,p:ll,t:'T'});return z;
 }
 function detectElliott(candles){
+ try{
  if(candles.length<80)return null;
  var pct=tf==='15m'?0.015:tf==='1h'?0.025:tf==='1d'?0.05:tf==='1w'?0.08:0.12;
  var z=zigzag(candles,pct);if(z.length<6)return null;
@@ -272,8 +278,10 @@ function detectElliott(candles){
   best={dir:up?'AUF':'AB',welle:welle,bonus:bonus,z3:z3,z5:z5,p:p,score:sc,r2:r2,r3:r3,r4:r4,r5:r5};
  }
  return best;
+ }catch(e){ log('FEHLER Elliott: '+e.message); return null; }
 }
 function detectABC(candles){
+ try{
  if(candles.length<50)return null;
  var pivs=[];for(var i=3;i<candles.length-3;i++){
   var h=true,l=true;for(var j=1;j<=3;j++){if(candles[i].high<candles[i-j].high||candles[i].high<candles[i+j].high)h=false;if(candles[i].low>candles[i-j].low||candles[i].low>candles[i+j].low)l=false;}
@@ -285,22 +293,28 @@ function detectABC(candles){
  if(!dn&&!up)return null;
  if(dn){var len=p[0].p-p[1].p,z1=p[2].p-len,z16=p[2].p-len*1.618;var w=price>p[2].p?'ABC ABGESCHLOSSEN':price>p[1].p?'WELLE B LAEUFT':'WELLE C LAEUFT';return {welle:w,z1:z1,z16:z16};}
  else{var len2=p[1].p-p[0].p,z12=p[2].p+len2,z162=p[2].p+len2*1.618;var w2=price<p[2].p?'ABC ABGESCHLOSSEN':price<p[1].p?'WELLE B LAEUFT':'WELLE C LAEUFT';return {welle:w2,z1:z12,z16:z162};}
+ }catch(e){ log('FEHLER ABC: '+e.message); return null; }
 }
 function drawChart(){
- var el=$('chart');
- if(!chart){chart=LightweightCharts.createChart(el,{layout:{background:{color:'#0b0d12'},textColor:'#aaa'},grid:{vertLines:{color:'#1a1d25'},horzLines:{color:'#1a1d25'}},timeScale:{timeVisible:true},width:el.clientWidth,height:320});series=chart.addCandlestickSeries({upColor:'#00e676',downColor:'#ff5252',wickUpColor:'#00e676',wickDownColor:'#ff5252'});}
- series.setData(state.candles);
- for(var i=0;i<priceLines.length;i++){try{series.removePriceLine(priceLines[i]);}catch(e){}}priceLines=[];
- if(state.fib){var keys=Object.keys(state.fib);for(var k=0;k<keys.length;k++){var kk=keys[k];priceLines.push(series.createPriceLine({price:state.fib[kk],color:kk==='0.618'?'#ff6d00':'#2962ff',lineWidth:(kk==='0.382'||kk==='0.618')?3:1,lineStyle:0,axisLabelVisible:true,title:'FIBO '+kk}));}}
- chart.timeScale().fitContent();
+ try{
+  if(typeof LightweightCharts==='undefined'){ log('FEHLER: Chart-Library nicht geladen'); return; }
+  var el=$('chart');
+  if(!chart){chart=LightweightCharts.createChart(el,{layout:{background:{color:'#0b0d12'},textColor:'#aaa'},grid:{vertLines:{color:'#1a1d25'},horzLines:{color:'#1a1d25'}},timeScale:{timeVisible:true},width:el.clientWidth,height:320});series=chart.addCandlestickSeries({upColor:'#00e676',downColor:'#ff5252',wickUpColor:'#00e676',wickDownColor:'#ff5252'});}
+  series.setData(state.candles);
+  for(var i=0;i<priceLines.length;i++){try{series.removePriceLine(priceLines[i]);}catch(e){}}priceLines=[];
+  if(state.fib){var keys=Object.keys(state.fib);for(var k=0;k<keys.length;k++){var kk=keys[k];priceLines.push(series.createPriceLine({price:state.fib[kk],color:kk==='0.618'?'#ff6d00':'#2962ff',lineWidth:(kk==='0.382'||kk==='0.618')?3:1,lineStyle:0,axisLabelVisible:true,title:'FIBO '+kk}));}}
+  chart.timeScale().fitContent();
+ }catch(e){ log('FEHLER Chart: '+e.message); }
 }
 async function load(){
+ try{
  syncHeads();
  var interval={'15m':'15m','1h':'1h','1d':'1d','1w':'1w','1M':'1M'}[tf];
  var gran={'15m':900,'1h':3600,'1d':86400,'1w':604800,'1M':2592000}[tf];
  log('Lade '+coin+' '+tfLabel(tf)+' ...');
  var res=await getKlines(coin+'USDT',interval,gran);
- if(!res.data.length){$('statusLine').textContent='KEINE DATEN für '+coin+' - tippe QUELLEN TESTEN';$('signalReason').textContent='Keine Klines. Alle Quellen blockieren gerade.';calc();return;}
+ log('getKlines fertig: '+res.src+' mit '+res.data.length+' Kerzen');
+ if(!res.data.length){$('statusLine').textContent='KEINE DATEN für '+coin;log('ABBRUCH: keine Daten');calc();return;}
  var closes=[];for(var i=0;i<res.data.length;i++)closes.push(res.data[i].close);
  var price=closes[closes.length-1];
  var r=rsiCalc(closes,14);
@@ -309,6 +323,7 @@ async function load(){
  var fib=calcFibo(sw.high,sw.low,sw.up);
  var ell=detectElliott(res.data);
  var abc=detectABC(res.data);
+ log('Analyse fertig: Preis '+price+' RSI '+r.toFixed(1));
  var btcRes=await getKlines('BTCUSDT','1h',3600);
  var btcTrend='NEUTRAL',btcPrice=0,btcRsi=50;
  if(btcRes.data.length>50){var bc=[];for(var b=0;b<btcRes.data.length;b++)bc.push(btcRes.data[b].close);btcPrice=bc[bc.length-1];btcRsi=rsiCalc(bc,14);var e=ema(bc,50);btcTrend=btcPrice>e&&btcRsi>50?'BULLISCH':btcPrice<e&&btcRsi<50?'BÄRISCH':'NEUTRAL';}
@@ -330,8 +345,10 @@ async function load(){
  log('OK '+coin+': '+price.toFixed(dec(coin))+' $ RSI '+r.toFixed(1)+' via '+res.src);
  drawChart();
  calc();
+ }catch(e){ log('FEHLER in load(): '+e.message); }
 }
 function calc(){
+ try{
  var myEntry=num($('myEntry').value);
  var price=state.price||myEntry||0;
  var isFallback=!state.price;
@@ -392,8 +409,10 @@ function calc(){
  var five=all5?('15M: '+LA['15m'].sig+' | 1H: '+LA['1h'].sig+' | 1D: '+LA['1d'].sig+' | 1W: '+LA['1w'].sig+' | 1M: '+LA['1M'].sig):'Tipp alle 5 Zeiten einmal an.';
  $('checkBox').innerHTML='<b>'+(blocked?'NICHT TRADEN':'OK '+ent)+'</b> | Score <b>'+sc+'/100</b><br>- Coin: '+coin+' #'+coinInfo(coin).rank+' '+coinInfo(coin).n+' - Gruppe '+coinInfo(coin).grp+'<br>- Signal: '+sig+'<br>- 5-Zeiten: '+five+'<br>- BTC: '+state.btc.trend+' ('+state.btc.price.toFixed(0)+' $) | RSI '+state.btc.rsi.toFixed(1)+'<br>- BTC.D: '+state.dom.btc.toFixed(1)+'% | USDT.D: '+state.dom.usdt.toFixed(1)+'% | ALT.D: '+state.dom.alt.toFixed(1)+'%<br>- Volumen: '+state.vol+'<br>- Divergenz: '+state.div+'<br>- Elliott: '+(state.elliott?state.elliott.welle:'KEIN ELLIOTT')+'<br>- ABC: '+(state.abc?state.abc.welle:'KEIN ABC')+'<br>- Fibo: '+state.high.toFixed(dec(coin))+' / '+state.low.toFixed(dec(coin))+' $ | '+(inGold?'IN Golden Zone':'ausserhalb');
  if(myEntry&&state.price){var pnl=(state.price-myEntry)/myEntry*100;$('myPnl').textContent='Dein Einstieg '+myEntry.toFixed(dec(coin))+' $ - Jetzt '+state.price.toFixed(dec(coin))+' $ = '+(pnl>=0?'+':'')+pnl.toFixed(2)+' %';}
+ }catch(e){ log('FEHLER in calc(): '+e.message); }
 }
 async function scanAll(){
+ try{
  $('allBox').innerHTML='Scanne alle 25...';
  var rows=[];
  for(var ci=0;ci<COINS.length;ci++){var c=COINS[ci];
@@ -406,6 +425,7 @@ async function scanAll(){
   await new Promise(function(res){setTimeout(res,120);});
  }
  $('allBox').innerHTML='<table><tr><th>Coin</th><th>Preis</th><th>RSI / Signal</th></tr>'+rows.join('')+'</table>';
+ }catch(e){ log('FEHLER scan: '+e.message); }
 }
 function startClock(){
  if(timer)clearInterval(timer);
@@ -414,7 +434,7 @@ function startClock(){
  $('cd').textContent=countdown>=3600?hh+':'+String(Math.floor((countdown%3600)/60)).padStart(2,'0')+':'+String(s).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
  },1000);
 }
-markActive();syncHeads();startClock();calc();load();
+try{ markActive();syncHeads();startClock();calc();load(); }catch(e){ log('FEHLER Start: '+e.message); }
 </script>
 </body>
 </html>
