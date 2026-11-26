@@ -1,146 +1,354 @@
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trading App - OHNE Trade - Binance zuerst</title>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOEL TRADER - Neu</title>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
-<style>*{box-sizing:border-box}body{margin:0;background:#0d1117;color:#fff;font-family:system-ui;padding:14px}h1{font-size:20px;text-align:center}.sub{text-align:center;color:#888;font-size:12px}.card{background:#161b22;border-radius:14px;padding:14px;margin:10px 0;border:1px solid #21262d}.row{display:flex;gap:6px;flex-wrap:wrap}button{flex:1;padding:12px 6px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;background:#333;color:#fff;min-width:60px}.on{background:#1f6feb!important}.on2{background:#238636!important}.go{background:#1f6feb;width:100%;padding:14px;font-size:16px}.scan{background:#22c55e;color:#000;width:100%;padding:16px;font-size:17px;font-weight:900}input{width:100%;background:#0d1117;border:1px solid #333;color:#fff;padding:10px;border-radius:8px;margin-top:4px}label{font-size:12px;color:#aaa}.big{font-size:34px;font-weight:800;text-align:center}.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}.gr{background:#22c55e;color:#000}.ye{background:#facc15;color:#000}.re{background:#ef4444}.bar{height:10px;background:#333;border-radius:5px;overflow:hidden}.fill{height:100%}.box{border-radius:10px;padding:10px;margin-top:8px;font-size:13px}.eb{background:#052e16;border:1px solid #22c55e}.fb{background:#0d1117;border:1px solid #22c55e}.ab{background:#1e1b4b;border:1px solid #3b82f6}.ls{border-radius:14px;padding:16px;text-align:center;border:3px solid #333}.lg{background:#052e16;border-color:#22c55e}.sh{background:#450a0a;border-color:#ef4444}.wt{background:#422006;border-color:#facc15}#chart{height:340px;background:#0d1117;border-radius:10px}.dbg{background:#000;border:1px solid #facc15;border-radius:8px;padding:8px;font-size:11px;white-space:pre-wrap;max-height:160px;overflow:auto}.fr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #222;font-size:13px}.here{background:#facc15;color:#000;border-radius:6px;padding:1px 6px;font-size:11px}.warn{background:#422006;border:2px solid #facc15;border-radius:10px;padding:10px;text-align:center;font-weight:800}</style></head>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#08090c;color:#e6e6e6;font-family:system-ui;padding:12px;padding-bottom:40px}
+header{text-align:center;padding:14px 0 6px}
+header h1{font-size:26px;letter-spacing:1px}
+header h1 span{color:#00e676}
+header p{color:#888;font-size:12px;margin-top:4px}
+.card{background:#12141a;border:1px solid #222;border-radius:16px;padding:14px;margin-top:12px}
+.card h2{font-size:14px;margin-bottom:10px;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:10px 14px;border-radius:999px;background:#1e212b;border:1px solid #333;color:#fff;font-weight:700;cursor:pointer}
+.pill.active{background:#00e676;color:#000;border-color:#00e676}
+.pill.tf.active{background:#2962ff;color:#fff;border-color:#2962ff}
+.top{display:flex;gap:12px}
+.bigbox{flex:1;background:#0b0d12;border:1px solid #222;border-radius:14px;padding:14px;text-align:center}
+.bigbox small{color:#888;font-size:11px}
+.bigbox .val{font-size:32px;font-weight:900;margin-top:4px}
+.badge{display:inline-block;padding:5px 12px;border-radius:999px;font-weight:800;font-size:12px;margin-top:6px}
+.g{background:#00e676;color:#000}.y{background:#ffca28;color:#000}.r{background:#ff5252;color:#fff}
+.bar{height:10px;background:#222;border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%}
+.signal{border-radius:16px;padding:18px;text-align:center;margin-top:12px;border:3px solid #333}
+.signal.long{background:#052e16;border-color:#00e676}
+.signal.short{background:#3b0a0a;border-color:#ff5252}
+.signal.wait{background:#2a2200;border-color:#ffca28}
+.signal .t{font-size:38px;font-weight:900}
+.signal .s{font-size:13px;color:#aaa;margin-top:4px}
+.grid3{display:flex;gap:8px;margin-top:12px}
+.grid3 div{flex:1;background:#0b0d12;border-radius:12px;padding:10px;text-align:center}
+.grid3 small{color:#888;font-size:11px;display:block}
+.grid3 b{font-size:15px}
+#chart{height:320px;border-radius:12px;overflow:hidden;background:#0b0d12}
+.frow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e212b;font-size:14px}
+.frow.gold{background:#ff6d0015;border-radius:8px;padding:9px 6px}
+.frow b{font-size:14px}
+.here{background:#ffca28;color:#000;font-size:10px;padding:2px 6px;border-radius:99px;margin-left:6px}
+button.main{width:100%;padding:15px;border:none;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px}
+.blue{background:#2962ff;color:#fff}.green{background:#00e676;color:#000}
+input{width:100%;background:#0b0d12;border:1px solid #333;color:#fff;padding:12px;border-radius:10px;margin-top:4px;font-size:16px}
+label{font-size:12px;color:#888}
+.list{font-size:14px;line-height:1.7}
+.list b{color:#fff}
+.debug{background:#000;border:1px solid #ffca28;border-radius:10px;padding:10px;font-size:11px;white-space:pre-wrap;max-height:120px;overflow:auto;color:#ffca28}
+.small{font-size:12px;color:#888;text-align:center;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:7px 4px;border-bottom:1px solid #222;text-align:left}
+</style>
+</head>
 <body>
-<h1>📈 LTC • KSM • XRP • XLM • SHX • ZEC</h1><div class="sub">Binance zuerst • Label sofort • Ohne Trade-Bereich</div>
-<div class="card" style="border:2px solid #22c55e"><b>🔍 WELLE 3 SCANNER</b><button class="scan" onclick="scan()">🔍 SCANNE ALLE WELLE-3-COINS</button><div id="scanBox" style="margin-top:8px;font-size:13px;color:#aaa">Noch nicht gescannt.</div></div>
-<div id="lsBox" class="ls wt"><div style="font-size:12px;color:#aaa">👉 <span id="lsLab">KSM 1D</span></div><div id="lsBig" style="font-size:44px;font-weight:900">⏳ LADEN</div><div id="lsSub">--</div><div id="lsGrund" style="font-size:13px;margin-top:6px"></div><div style="display:flex;gap:8px;margin-top:10px"><div style="flex:1;background:#0d1117;border-radius:8px;padding:8px">🎯 <b id="lsE">--</b></div><div style="flex:1;background:#0d1117;border-radius:8px;padding:8px">🛑 <b id="lsS">--</b></div><div style="flex:1;background:#0d1117;border-radius:8px;padding:8px">✅ <b id="lsT">--</b></div></div><div id="lsC" style="font-size:12px;color:#aaa;margin-top:6px"></div></div>
-<div class="card"><b>🔧 DEBUG</b><div id="dbg" class="dbg">Starte...</div><button class="go" style="background:#facc15;color:#000;margin-top:8px" onclick="testQ()">🔧 QUELLEN TESTEN</button></div>
-<div class="card"><b>🌍 Dominanz</b><div style="font-size:12px">BTC.D <b id="bd">--</b> | USDT.D <b id="ud">--</b> | ALT.D <b id="ad">--</b></div><div id="domBox" style="font-size:13px;margin-top:6px">⏳ Lade...</div></div>
-<div class="card"><div style="text-align:center;font-size:12px;color:#aaa">RSI (14) - <span id="rsiLab">1D - KSM</span></div><div class="big" id="rsiBig">--</div><div style="text-align:center"><span id="rsiBd"></span></div><div class="bar"><div id="rsiFill" class="fill" style="width:50%;background:#facc15"></div></div><div id="rsiVer" style="font-size:12px;color:#aaa;margin-top:6px">⏳ Lade...</div><div id="rsiQ" style="font-size:12px;color:#22c55e;text-align:center"></div></div>
-<div class="card"><b>🪙 Coin</b><div class="row" id="coins"></div><b>⏰ Timeframe</b><div class="row"><button data-tf="15m" onclick="setTF('15m')">15 MIN</button><button data-tf="1h" onclick="setTF('1h')">1 STUNDE</button><button data-tf="1d" class="on2" onclick="setTF('1d')">1 TAG</button><button data-tf="1w" onclick="setTF('1w')">1 WOCHE</button><button data-tf="1M" onclick="setTF('1M')">1 MONAT</button></div><div id="coinInfo" style="font-size:12px;color:#aaa;margin-top:6px"></div><div style="font-size:12px;text-align:center;margin-top:8px">Update in <b id="cd">30:00</b> • <span id="lu">-</span> • <span id="tfAnz">1D - KSM</span></div><button class="go" style="margin-top:8px" onclick="load()">🔄 JETZT LADEN</button></div>
-<div class="card"><b>🧠 Score</b><div style="text-align:center"><span id="scBig" style="font-size:44px;font-weight:800">--</span> / 100</div><div style="text-align:center"><span id="scBd"></span></div><div class="bar"><div id="scBar" class="fill" style="width:50%;background:#facc15"></div></div><div id="scDet" style="font-size:12px;color:#aaa;margin-top:6px"></div></div>
-<div class="card"><b>🌊 Elliott V2 FIX</b><div id="elBox">⏳ Lade...</div><div id="elDet" style="font-size:13px;margin-top:6px"></div><div id="elTg" class="box eb">⏳ Lade Ziele...</div><div id="elRu" style="font-size:12px;color:#888;margin-top:6px"></div></div>
-<div class="card"><b>🔤 ABC</b><div id="abBox">⏳ Lade...</div><div id="abTg" class="box ab">⏳ Lade...</div></div>
-<div class="card"><b>📐 Chart + Fibo</b><div id="chart"></div><div id="fibInfo" style="font-size:12px;color:#aaa;margin-top:6px"></div><div id="fibBox" class="box fb">⏳ Lade...</div></div>
-<div class="card"><b>🔥 Smart Money</b><div id="smBox">⏳</div><div id="fvgBox" style="font-size:13px;color:#aaa"></div></div>
-<div class="card"><b>₿ BTC</b><div id="btcBox">⏳</div></div>
-<div class="card"><label>Preis jetzt</label><input id="preis" readonly><label>RSI (14)</label><input id="rsi14" readonly><label>RSI Quelle</label><input id="rsiB" readonly><label>MACD</label><input id="macd" readonly><label>Swing-Hoch FULL</label><input id="sH" readonly><label>Swing-Tief FULL</label><input id="sT" readonly><label>Long / Short</label><input id="lsIn" readonly><label>Elliott jetzt</label><input id="elIn" readonly><label>Elliott Ziel</label><input id="elZ" readonly><label>ABC jetzt</label><input id="abIn" readonly><label>ABC Ziel</label><input id="abZ" readonly><label>Volumen</label><input id="volIn" readonly><label>Divergenz</label><input id="divIn" readonly><label>Fibo Position</label><input id="fibPos" readonly><div id="live" class="sub"></div></div>
-<div class="card"><label>Dein Einstieg (2,6 geht)</label><input id="einstieg" type="text" value="2,6"><button class="go" style="margin-top:8px" onclick="calc()">📊 ANALYSE BERECHNEN</button></div>
-<div id="erg"></div>
-<div class="card"><b>📊 Analyse</b><div id="ana">Wird geladen...</div></div>
-<div class="card"><b>Fibonacci FULL</b><div id="fibList">Wird geladen...</div></div>
-<div class="card"><b>🎯 Trading-Plan</b><div id="plan">Wird geladen...</div></div>
-<div class="card"><b>🔄 Alle Timeframes</b><div id="vgl" style="font-size:13px;color:#aaa">Tippe alle 5 Timeframes einmal an.</div><div id="ampel" style="margin-top:8px"></div></div>
-<div class="card"><b>✅ Checkliste</b><div id="check">Noch keine Analyse.</div></div>
-<div class="card"><b>📊 Alle Coins</b><div id="allC" style="font-size:13px;color:#aaa">Tippe auf SCANNEN.</div><button class="go" style="margin-top:8px" onclick="loadAll()">🔄 ALLE COINS SCANNEN</button></div>
+
+<header><h1>NOEL <span>TRADER</span></h1><p>Neu aufgebaut • Binance Klines • RSI selbst gerechnet</p></header>
+
+<div class="card"><h2>🪙 Coin</h2><div class="pills" id="coinPills"></div>
+<h2 style="margin-top:14px">⏰ Zeit</h2><div class="pills" id="tfPills"></div>
+<div class="small"><span id="statusLine">Bereit</span> • Update in <b id="cd">30:00</b></div>
+<button class="main blue" onclick="load()">🔄 JETZT LADEN</button></div>
+
+<div class="signal wait" id="signalBox">
+<div style="font-size:12px;color:#aaa" id="signalHead">KSM • 1D</div>
+<div class="t" id="signalText">⏳ LADEN</div>
+<div class="s" id="signalReason">Lade Binance Klines...</div>
+<div class="grid3"><div><small>🎯 EINTRITT</small><b id="vEntry">--</b></div><div><small>🛑 STOP</small><b id="vStop">--</b></div><div><small>✅ ZIEL</small><b id="vTarget">--</b></div></div>
+<div class="small" id="vRrv">--</div>
+</div>
+
+<div class="top">
+<div class="bigbox"><small>PREIS</small><div class="val" id="priceBig">--</div><div class="small" id="priceSrc">--</div></div>
+<div class="bigbox"><small>RSI (14) • <span id="rsiHead">1D - KSM</span></small><div class="val" id="rsiBig">--</div><span class="badge y" id="rsiBadge">--</span><div class="bar"><div id="rsiBar" style="width:50%;background:#ffca28"></div></div></div>
+</div>
+
+<div class="card"><h2>🧠 Score</h2><div style="text-align:center;font-size:40px;font-weight:900" id="scoreBig">-- <span style="font-size:16px;color:#888">/ 100</span></div><div class="bar"><div id="scoreBar" style="width:50%;background:#ffca28"></div></div><div class="list" id="scoreDet" style="margin-top:10px"></div></div>
+
+<div class="card"><h2>📐 Chart + Fibo</h2><div id="chart"></div><div class="small" id="fibInfo">--</div></div>
+
+<div class="card"><h2>📊 Fibonacci FULL</h2><div id="fibList">Lade...</div></div>
+
+<div class="card"><h2>🌊 Elliott + ABC</h2><div class="list" id="elliottBox">Lade...</div><div class="list" id="abcBox" style="margin-top:10px"></div></div>
+
+<div class="card"><h2>🎯 Trading-Plan</h2><div class="list" id="planBox">Lade...</div></div>
+
+<div class="card"><h2>✅ Checkliste</h2><div class="list" id="checkBox">Noch keine Analyse.</div></div>
+
+<div class="card"><h2>🔍 Alle Coins scannen</h2><button class="main green" onclick="scanAll()">🔍 ALLE COINS SCANNEN</button><div id="allBox" class="small" style="text-align:left;margin-top:10px">Noch nicht gescannt.</div></div>
+
+<div class="card"><h2>📝 Dein Einstieg</h2><label>Einstiegspreis (Komma geht: 2,6)</label><input id="myEntry" value="2,6"><button class="main blue" onclick="calc()">📊 ANALYSE BERECHNEN</button><div class="small" id="myPnl"></div></div>
+
+<div class="card"><h2>🔧 Debug</h2><div class="debug" id="dbg">Starte...</div><button class="main" style="background:#ffca28;color:#000" onclick="testSources()">🔧 QUELLEN TESTEN</button></div>
+
 <script>
-let $=id=>document.getElementById(id),coin='KSM',tf='1d',LA={},allR={},timer=null,cd=1800,lastH=0,lastT=0,btcS='NEUTRAL',btcP=0,btcR=50,volS='NEUTRAL',divS='KEINE',fibD=null,fibF=null,ch=null,cs=null,lines=[],candles=[],mode='full',swS='KEIN SWEEP',fvgS='KEIN FVG',fund=0,fundS='NEUTRAL',abcD=null,abcS='KEIN ABC',elD=null,elS='KEIN ELLIOTT',usdtD=0,usdtT='NEUTRAL',usdtS='NEUTRAL',btcD=0,ethD=0,altD=0,altS='NEUTRAL',totM=0,domH=[],lsE=0,lsS=0,lsT=0,dbgL=[],src='-',hasLive=false,loadToken=0;
+const $=id=>document.getElementById(id);
+const COINS=['KSM','LTC','XRP','XLM','SHX','ZEC','LINK','ADA','DOT','AVAX','ETH','DOGE','BTC','SOL'];
+const TFS=[['15m','15 MIN'],['1h','1 STD'],['1d','1 TAG'],['1w','1 WOCHE'],['1M','1 MONAT']];
+let coin='KSM', tf='1d';
+let state={price:0,rsi:50,macd:0,high:0,low:0,fib:null,swingHigh:0,swingLow:0,elliott:null,abc:null,btc:{price:0,rsi:50,trend:'NEUTRAL'},vol:'NEUTRAL',div:'KEINE',dom:{btc:0,usdt:0,alt:0},candles:[]};
+let LA={}; // pro Timeframe Signal merken
+let chart=null, series=null, priceLines=[];
+let countdown=1800, timer=null;
+let dbgLines=[];
 function num(v){if(v==null)return 0;let s=String(v).trim().replace(/\s/g,'');if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else if(s.includes(','))s=s.replace(',','.');let n=parseFloat(s);return isNaN(n)?0:n;}
-let COINS=['LTC','KSM','XRP','XLM','SHX','ZEC','LINK','ADA','DOT','AVAX','ETH','DOGE','BTC','SOL'];
-let INFO={KSM:'<b>KSM:</b> RSI von Binance zuerst.',LTC:'<b>LTC:</b> RSI von Binance.',XRP:'<b>XRP:</b> RSI von Binance.',XLM:'<b>XLM:</b> RSI von Binance.',SHX:'<b>SHX:</b> RSI von Bitrue.',ZEC:'<b>ZEC:</b> RSI von Binance.',LINK:'<b>LINK:</b> Orakel.',ADA:'<b>ADA:</b> Cardano.',DOT:'<b>DOT:</b> Bruder von KSM.',AVAX:'<b>AVAX:</b> Avalanche.',ETH:'<b>ETH:</b> Ethereum.',DOGE:'<b>DOGE:</b> Meme.',BTC:'<b>BTC:</b> König.',SOL:'<b>SOL:</b> Solana.'};
-let TFU={'15m':60,'1h':300,'1d':1800,'1w':3600,'1M':86400},TFL={'15m':'15M','1h':'1H','1d':'1D','1w':'1W','1M':'1M'};
-function log(m){dbgL.push(m);if(dbgL.length>40)dbgL.shift();$('dbg').innerText=dbgL.join('\n');}
-function updateLabels(){$('rsiLab').innerText=TFL[tf]+' - '+coin;$('lsLab').innerText=coin+' '+TFL[tf];$('tfAnz').innerText=TFL[tf]+' - '+coin;$('rsiVer').innerText='⏳ Lade '+coin+' '+TFL[tf]+'...';$('rsiBig').innerText='--';}
-function st(c){return c==='XLM'?4:c==='SHX'?6:c==='XRP'?4:c==='ZEC'?2:(c==='BTC'||c==='ETH')?0:(c==='DOGE'||c==='ADA')?4:c==='DOT'?3:(c==='AVAX'||c==='LINK'||c==='SOL')?2:3;}
-function rsiCalc(c,p){if(!c||c.length<p+2)return 50;let g=0,l=0;for(let i=1;i<=p;i++){let d=c[i]-c[i-1];if(d>=0)g+=d;else l+=-d;}let ag=g/p,al=l/p;for(let i=p+1;i<c.length;i++){let d=c[i]-c[i-1];ag=(ag*(p-1)+(d>0?d:0))/p;al=(al*(p-1)+(d<0?-d:0))/p;}if(al===0)return 100;if(ag===0)return 0;return 100-(100/(1+ag/al));}
+function dec(c){return c==='XLM'?4:c==='SHX'?6:c==='XRP'?4:c==='ZEC'?2:(c==='BTC'||c==='ETH')?0:(c==='DOGE'||c==='ADA')?4:c==='DOT'?3:(c==='AVAX'||c==='LINK'||c==='SOL')?2:3;}
+function tfLabel(t){return t==='15m'?'15M':t==='1h'?'1H':t==='1d'?'1D':t==='1w'?'1W':'1M';}
+function log(m){dbgLines.push(m);if(dbgLines.length>30)dbgLines.shift();$('dbg').textContent=dbgLines.join('\n');}
+function fmt(n){return n.toFixed(dec(coin))+' $';}
+function rsiCalc closes(c,p){let g=0,l=0;for(let i=1;i<=p;i++){let d=c[i]-c[i-1];if(d>=0)g+=d;else l+=-d;}let ag=g/p,al=l/p;for(let i=p+1;i<c.length;i++){let d=c[i]-c[i-1];ag=(ag*(p-1)+(d>0?d:0))/p;al=(al*(p-1)+(d<0?-d:0))/p;}if(al===0)return 100;if(ag===0)return 0;return 100-(100/(1+ag/al));}
 function ema(d,p){let k=2/(p+1),e=0;for(let i=0;i<p;i++)e+=d[i];e/=p;for(let i=p;i<d.length;i++)e=d[i]*k+e*(1-k);return e;}
-async function fj(u,label){
- try{let c=new AbortController(),t=setTimeout(()=>c.abort(),3500),r=await fetch(u,{headers:{Accept:'application/json'},signal:c.signal});clearTimeout(t);if(r.ok){let x=await r.text();try{return JSON.parse(x)}catch(e){return x}}else{log('⚠️ '+label+' HTTP '+r.status);}}catch(e){log('❌ '+label+' FAIL: '+e.message);}
- return null;}
-async function testQ(){dbgL=[];log('Teste '+coin+' '+tf+' ...');let a=await fj('https://api.binance.com/api/v3/klines?symbol='+coin+'USDT&interval=1d&limit=5','Binance');log(a?'✅ Binance GEHT ('+a.length+' Kerzen)':'❌ Binance NICHT');let b=await fj('https://openapi.bitrue.com/api/v1/klines?symbol='+coin+'USDT&interval=1d&limit=5','Bitrue');log(b?'✅ Bitrue GEHT':'❌ Bitrue NICHT - normal, Bitrue blockt Browser');let cc=await fj('https://api.exchange.coinbase.com/products/'+coin+'-USD/candles?granularity=86400','Coinbase');log(cc?'✅ Coinbase GEHT':'❌ Coinbase NICHT');}
-async function getK(sym,inter,myTf){
- let base=sym.replace('USDT',''),cb=myTf==='15m'?900:myTf==='1h'?3600:myTf==='1d'?86400:myTf==='1w'?604800:2592000;
- let bi=myTf==='15m'?'15m':myTf==='1h'?'1h':myTf==='1d'?'1d':myTf==='1w'?'1w':myTf==='1M'?'1M':'1d';
- let order = (base==='SHX') ? ['bitrue','binance','coinbase'] : ['binance','bitrue','coinbase'];
- for(let q of order){
-  if(q==='binance'){let d=await fj('https://api.binance.com/api/v3/klines?symbol='+sym+'&interval='+inter+'&limit=500','Binance');if(Array.isArray(d)&&d.length>=20){src='Binance '+sym;return d.map(k=>({time:Math.floor(k[0]/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4],vol:+k[5]}));}}
-  if(q==='bitrue'){let j=await fj('https://openapi.bitrue.com/api/v1/klines?symbol='+sym+'&interval='+bi+'&limit=500','Bitrue');let a=null;if(Array.isArray(j))a=j;else if(j&&Array.isArray(j.data))a=j.data;else if(j&&j.data&&Array.isArray(j.data.klines))a=j.data.klines;if(a&&a.length>=20){src='Bitrue '+sym;return a.map(k=>{let t=+k[0];if(t>1e12)t=Math.floor(t/1000);return{time:t,open:+k[1],high:+k[2],low:+k[3],close:+k[4],vol:+k[5]||0}});}}
-  if(q==='coinbase'){let d=await fj('https://api.exchange.coinbase.com/products/'+base+'-USD/candles?granularity='+cb,'Coinbase');if(Array.isArray(d)&&d.length>=20){src='Coinbase';return d.slice().reverse().map(k=>({time:k[0],open:k[3],high:k[2],low:k[1],close:k[4],vol:k[5]}));}}
+function buildPills(){
+ $('coinPills').innerHTML=COINS.map(c=>'<button class="pill '+(c===coin?'active':'')+'" onclick="pickCoin(\''+c+'\')">'+c+'</button>').join('');
+ $('tfPills').innerHTML=TFS.map(([t,l])=>'<button class="pill tf '+(t===tf?'active':'')+'" onclick="pickTf(\''+t+'\')">'+l+'</button>').join('');
+}
+function pickCoin(c){coin=c;buildPills();syncHeads();load();}
+function pickTf(t){tf=t;countdown={'15m':60,'1h':300,'1d':1800,'1w':3600,'1M':86400}[t];buildPills();syncHeads();load();}
+function syncHeads(){
+ $('rsiHead').textContent=tfLabel(tf)+' - '+coin;
+ $('signalHead').textContent=coin+' • '+tfLabel(tf);
+ $('statusLine').textContent='Lade '+coin+' '+tfLabel(tf)+'...';
+}
+async function fetchJson(url){
+ try{
+  let c=new AbortController();let tm=setTimeout(()=>c.abort(),4000);
+  let r=await fetch(url,{signal:c.signal});clearTimeout(tm);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return await r.json();
+ }catch(e){log('❌ '+url.slice(0,60)+' → '+e.message);return null;}
+}
+// NUR Binance, plus Coinbase als Backup. Kein Bitrue, kein Proxy.
+async function getKlines(sym, interval, gran){
+ let d=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+sym+'&interval='+interval+'&limit=500');
+ if(Array.isArray(d)&&d.length>=30){return {src:'Binance',data:d.map(k=>({time:Math.floor(k[0]/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4],vol:+k[5]}))};}
+ let base=sym.replace('USDT','');
+ let cb=await fetchJson('https://api.exchange.coinbase.com/products/'+base+'-USD/candles?granularity='+gran);
+ if(Array.isArray(cb)&&cb.length>=30){return {src:'Coinbase',data:cb.slice().reverse().map(k=>({time:k[0],open:k[3],high:k[2],low:k[1],close:k[4],vol:k[5]}))};}
+ return {src:'-',data:[]};
+}
+async function testSources(){
+ dbgLines=[];log('Teste '+coin+'...');
+ let b=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+coin+'USDT&interval=1d&limit=5');
+ log(b?'✅ Binance GEHT ('+b.length+')':'❌ Binance geht NICHT');
+ let cb=await fetchJson('https://api.exchange.coinbase.com/products/'+coin+'-USD/candles?granularity=86400');
+ log(cb?'✅ Coinbase GEHT':'❌ Coinbase geht NICHT');
+}
+function calcFibo(high,low,up){
+ let d=high-low;let L={};
+ if(up){L={'0':high,'0.236':high-d*.236,'0.382':high-d*.382,'0.5':high-d*.5,'0.618':high-d*.618,'0.786':high-d*.786,'1':low,'-0.272':high+d*.272,'-0.618':high+d*.618};}
+ else{L={'0':low,'0.236':low+d*.236,'0.382':low+d*.382,'0.5':low+d*.5,'0.618':low+d*.618,'0.786':low+d*.786,'1':high,'-0.272':low-d*.272,'-0.618':low-d*.618};}
+ return L;
+}
+function findSwing(candles){
+ let hi=-1e18,lo=1e18,ih=0,il=0;
+ candles.forEach((x,i)=>{if(x.high>hi){hi=x.high;ih=i;}if(x.low<lo){lo=x.low;il=i;}});
+ return {high:hi,low:lo,up:ih>il};
+}
+function zigzag(c,pct){
+ let z=[],lh=c[0].high,ll=c[0].low,lhi=0,lli=0,dir=0;
+ for(let i=1;i<c.length;i++){let x=c[i];
+  if(dir>=0){if(x.high>lh){lh=x.high;lhi=i;}if(x.low<lh*(1-pct)){z.push({i:lhi,p:lh,t:'H'});dir=-1;ll=x.low;lli=i;}}
+  else{if(x.low<ll){ll=x.low;lli=i;}if(x.high>ll*(1+pct)){z.push({i:lli,p:ll,t:'T'});dir=1;lh=x.high;lhi=i;}}
  }
- return [];}
-async function dom(){try{let j=await fj('https://api.coinpaprika.com/v1/global','Coinpaprika');if(j){totM=j.market_cap_usd||0;btcD=j.bitcoin_dominance_percentage||0;ethD=12;try{let u=await fj('https://api.coinpaprika.com/v1/tickers/usdt-tether','USDT');if(u&&u.quotes&&u.quotes.USD)usdtD=(u.quotes.USD.market_cap/totM)*100;}catch(e){usdtD=4.5;}altD=100-btcD-ethD-usdtD-5;if(altD<0)altD=100-btcD-ethD-usdtD;domH.push({b:btcD,u:usdtD,a:altD});if(domH.length>20)domH.shift();let bT=domH.length>=4?btcD-domH[domH.length-4].b:0,uT=domH.length>=4?usdtD-domH[domH.length-4].u:0,aT=domH.length>=4?altD-domH[domH.length-4].a:0;usdtT=uT>0.05?'STEIGT ⬆️':uT<-0.05?'FÄLLT ⬇️':'SEITWÄRTS';usdtS=uT>0.05?'BÄRISCH FÜR BTC 🔴':uT<-0.05?'BULLISCH FÜR BTC 🟢':'NEUTRAL 🟡';altS=aT>0.1&&uT<-0.05?'ALTSEASON 🟢🟢':aT>0.1?'ALTS STARK 🟢':aT<-0.1&&bT>0.1?'BTC SEASON 🔴':aT<-0.1&&uT>0.05?'ALT CRASH 🔴🔴':'NEUTRAL 🟡';$('bd').innerText=btcD.toFixed(2)+'%';$('ud').innerText=usdtD.toFixed(2)+'% '+usdtT;$('ad').innerText=altD.toFixed(2)+'%';$('domBox').innerHTML='BTC.D '+btcD.toFixed(2)+'% | USDT.D '+usdtD.toFixed(2)+'% → '+usdtS+'<br>ALT.D '+altD.toFixed(2)+'% → '+altS;return true;}}catch(e){}return false;}
-function swingF(c){let hi=-1e9,lo=1e9,ih=0,il=0;c.forEach((x,i)=>{if(x.high>hi){hi=x.high;ih=i;}if(x.low<lo){lo=x.low;il=i;}});let up=ih>il;if(up){let v=c.slice(0,ih+1);lo=Math.min(...v.map(x=>x.low));}else{let v=c.slice(0,il+1);hi=Math.max(...v.map(x=>x.high));}return{hi,lo,up};}
-function swingR(c){let d=c.slice(-100),hi=-1e9,lo=1e9,ih=0,il=0;d.forEach((x,i)=>{if(x.high>hi){hi=x.high;ih=i;}if(x.low<lo){lo=x.low;il=i;}});let up=ih>il;if(up){let v=d.slice(0,ih+1);lo=Math.min(...v.map(x=>x.low));}else{let v=d.slice(0,il+1);hi=Math.max(...v.map(x=>x.high));}return{hi,lo,up};}
-function fibo(hi,lo,up){let d=hi-lo,l;if(up)l={'0':hi,'0.236':hi-d*.236,'0.382':hi-d*.382,'0.5':hi-d*.5,'0.618':hi-d*.618,'0.786':hi-d*.786,'1':lo,'-0.272':hi+d*.272,'-0.618':hi+d*.618};else l={'0':lo,'0.236':lo+d*.236,'0.382':lo+d*.382,'0.5':lo+d*.5,'0.618':lo+d*.618,'0.786':lo+d*.786,'1':hi,'-0.272':lo-d*.272,'-0.618':lo-d*.618};return{levels:l,diff:d};}
-function piv(c,lk=3,rk=3){let p=[];for(let i=lk;i<c.length-rk;i++){let h=true,l=true;for(let j=1;j<=lk;j++){if(c[i].high<c[i-j].high||c[i].high<c[i+j].high)h=false;if(c[i].low>c[i-j].low||c[i].low>c[i+j].low)l=false;}if(h)p.push({idx:i,preis:c[i].high,typ:'HOCH'});if(l)p.push({idx:i,preis:c[i].low,typ:'TIEF'});}p.sort((a,b)=>a.idx-b.idx);let f=[];for(let x of p){if(!f.length||f[f.length-1].typ!==x.typ)f.push(x);else{let la=f[f.length-1];if(x.typ==='HOCH'&&x.preis>la.preis)f[f.length-1]=x;if(x.typ==='TIEF'&&x.preis<la.preis)f[f.length-1]=x;}}return f;}
-function zz(c,pct){let z=[],lh=c[0].high,ll=c[0].low,lhi=0,lli=0,dir=0;for(let i=1;i<c.length;i++){let x=c[i];if(dir>=0){if(x.high>lh){lh=x.high;lhi=i;}if(x.low<lh*(1-pct)){z.push({idx:lhi,preis:lh,typ:'HOCH'});dir=-1;ll=x.low;lli=i;}}else{if(x.low<ll){ll=x.low;lli=i;}if(x.high>ll*(1+pct)){z.push({idx:lli,preis:ll,typ:'TIEF'});dir=1;lh=x.high;lhi=i;}}}if(dir>=0)z.push({idx:lhi,preis:lh,typ:'HOCH'});else z.push({idx:lli,preis:ll,typ:'TIEF'});return z;}
-function elliott(c,myCoin){
- if(!c||c.length<80)return null;let pct=tf==='15m'?0.015:tf==='1h'?0.025:tf==='1d'?0.05:tf==='1w'?0.08:0.12;let z=zz(c,pct);if(z.length<6)return null;let preis=c[c.length-1].close,sx=st(myCoin),best=null,bs=-999,last=c.length-1;
- for(let s=Math.max(0,z.length-20);s<=z.length-6;s++){let p=z.slice(s,s+6);let up=p[0].typ==='TIEF'&&p[1].typ==='HOCH'&&p[2].typ==='TIEF'&&p[3].typ==='HOCH'&&p[4].typ==='TIEF'&&p[5].typ==='HOCH';let dn=p[0].typ==='HOCH'&&p[1].typ==='TIEF'&&p[2].typ==='HOCH'&&p[3].typ==='TIEF'&&p[4].typ==='HOCH'&&p[5].typ==='TIEF';if(!up&&!dn)continue;if(last-p[5].idx>60)continue;
-  let w1=Math.abs(p[1].preis-p[0].preis),w2=Math.abs(p[1].preis-p[2].preis),w3=Math.abs(p[3].preis-p[2].preis),w4=Math.abs(p[3].preis-p[4].preis),w5=Math.abs(p[5].preis-p[4].preis);if(w1<=0||w3<=0||w5<=0)continue;
-  let r2=w2/w1,rg2=r2<1&&r2>0.15,rg3=!(w3<w1&&w3<w5),rg4=up?(p[4].preis>p[1].preis):(p[4].preis<p[1].preis);let r3=w3/w1,r5=w5/w1,r4=w4/w3;let sc=0;if(rg2)sc+=20;else sc-=50;if(rg3)sc+=20;else sc-=50;if(rg4)sc+=20;else sc-=50;if(r2>=0.382&&r2<=0.786)sc+=15;else if(r2>=0.236&&r2<=0.886)sc+=5;if(r3>=1.3&&r3<=2)sc+=15;else if(r3>=1&&r3<=2.618)sc+=5;if(r4>=0.236&&r4<=0.5)sc+=10;if(r5>=0.618&&r5<=1.618)sc+=10;sc+=(s/z.length)*5;sc=Math.min(100,sc);if(!(rg2&&rg3&&rg4))continue;
-  let welle,fazit,bonus,z3,z51,z516,k5=last-p[5].idx,k4=last-p[4].idx,k3=last-p[3].idx;
-  if(up){z3=p[2].preis+w1*1.618;z51=p[4].preis+w1;z516=p[4].preis+w1*1.618;
-   if(k5<=5&&Math.abs(preis-p[5].preis)/p[5].preis<0.02){welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls fertig! Preis '+preis.toFixed(sx)+' $ nahe W5-Hoch '+p[5].preis.toFixed(sx)+' $. Jetzt ABC-Korrektur. W5 = '+((r5)*100).toFixed(0)+'% von W1.';bonus=-5;}
-   else if(k5>5&&preis<p[5].preis*0.98){welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls fertig, Preis schon '+((1-preis/p[5].preis)*100).toFixed(1)+'% unter W5-Hoch '+p[5].preis.toFixed(sx)+' $. ABC-Korrektur läuft.';bonus=-5;}
-   else if(k4<=10&&preis>p[4].preis&&preis<p[5].preis){welle='WELLE 5 LÄUFT 🔴';fazit='Letzte Welle! Preis '+preis.toFixed(sx)+' $ zwischen W4 '+p[4].preis.toFixed(sx)+' $ und W5-Hoch '+p[5].preis.toFixed(sx)+' $. Ziel 1.618 = '+z516.toFixed(sx)+' $';bonus=-10;}
-   else if(preis<p[3].preis&&preis>p[4].preis*0.98){welle='WELLE 4 LÄUFT ⏳';fazit='Welle 4 läuft: Preis '+preis.toFixed(sx)+' $ nach W3-Hoch '+p[3].preis.toFixed(sx)+' $. '+(r4*100).toFixed(0)+'% von W3 korrigiert. Ideal 23-50%.';bonus=-8;}
-   else if(preis>p[2].preis&&preis<=p[3].preis&&k3<=5){welle='WELLE 3 LÄUFT 🚀';fazit='Welle 3 - STÄRKSTE! Preis '+preis.toFixed(sx)+' $ auf Weg zu '+p[3].preis.toFixed(sx)+' $. Ist '+(r3*100).toFixed(0)+'% von W1.'+(p[3].preis>=z3?' Ziel 1.618 schon übertroffen!':' Ziel 1.618 = '+z3.toFixed(sx)+' $');bonus=15;}
-   else if(preis>p[1].preis&&preis<p[2].preis){welle='WELLE 2 LÄUFT ⏳';fazit='Welle 2: '+(r2*100).toFixed(0)+'% von W1 zurück.';bonus=-8;}
-   else{welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls fertig.';bonus=-5;}
-  }else{z3=p[2].preis-w1*1.618;z51=p[4].preis-w1;z516=p[4].preis-w1*1.618;
-   if(k5<=5&&Math.abs(preis-p[5].preis)/p[5].preis<0.02){welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls runter fertig!';bonus=-5;}
-   else if(k5>5&&preis>p[5].preis*1.02){welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls runter fertig.';bonus=-5;}
-   else if(k4<=10&&preis<p[4].preis&&preis>p[5].preis){welle='WELLE 5 LÄUFT 🔴';fazit='Letzte Welle runter! Ziel = '+z51.toFixed(sx)+' $';bonus=-10;}
-   else if(preis>p[3].preis&&preis<p[4].preis*1.02){welle='WELLE 4 LÄUFT ⏳';fazit='Welle 4 Erholung: '+(r4*100).toFixed(0)+'% von W3.';bonus=-8;}
-   else if(preis<p[2].preis&&preis>=p[3].preis&&k3<=5){welle='WELLE 3 LÄUFT 🔴';fazit='Welle 3 runter! Ist '+(r3*100).toFixed(0)+'% von W1. Ziel = '+z3.toFixed(sx)+' $';bonus=15;}
-   else if(preis<p[1].preis&&preis>p[2].preis){welle='WELLE 2 LÄUFT ⏳';fazit='Welle 2: '+(r2*100).toFixed(0)+'%';bonus=-8;}
-   else{welle='WELLE 5 ABGESCHLOSSEN ✅';fazit='Impuls runter fertig.';bonus=-5;}
+ z.push(dir>=0?{i:lhi,p:lh,t:'H'}:{i:lli,p:ll,t:'T'});return z;
+}
+function detectElliott(candles){
+ if(candles.length<80)return null;
+ let pct=tf==='15m'?0.015:tf==='1h'?0.025:tf==='1d'?0.05:tf==='1w'?0.08:0.12;
+ let z=zigzag(candles,pct);if(z.length<6)return null;
+ let price=candles[candles.length-1].close,last=candles.length-1,best=null,bs=-999;
+ for(let s=Math.max(0,z.length-20);s<=z.length-6;s++){
+  let p=z.slice(s,s+6);
+  let up=p[0].t==='T'&&p[1].t==='H'&&p[2].t==='T'&&p[3].t==='H'&&p[4].t==='T'&&p[5].t==='H';
+  let dn=p[0].t==='H'&&p[1].t==='T'&&p[2].t==='H'&&p[3].t==='T'&&p[4].t==='H'&&p[5].t==='T';
+  if(!up&&!dn)continue;if(last-p[5].i>60)continue;
+  let w1=Math.abs(p[1].p-p[0].p),w2=Math.abs(p[1].p-p[2].p),w3=Math.abs(p[3].p-p[2].p),w4=Math.abs(p[3].p-p[4].p),w5=Math.abs(p[5].p-p[4].p);
+  if(w1<=0||w3<=0||w5<=0)continue;
+  let r2=w2/w1,r3=w3/w1,r4=w4/w3,r5=w5/w1;
+  let ok2=r2<1&&r2>0.15, ok3=!(w3<w1&&w3<w5), ok4=up?(p[4].p>p[1].p):(p[4].p<p[1].p);
+  if(!(ok2&&ok3&&ok4))continue;
+  let sc=60;if(r2>=0.382&&r2<=0.786)sc+=10;if(r3>=1.3&&r3<=2)sc+=10;if(r4>=0.236&&r4<=0.5)sc+=10;if(r5>=0.618&&r5<=1.618)sc+=10;
+  if(sc<=bs)continue;bs=sc;
+  let k5=last-p[5].i,k4=last-p[4].i,k3=last-p[3].i,welle='',bonus=0,z3=0,z5=0;
+  if(up){z3=p[2].p+w1*1.618;z5=p[4].p+w1*1.618;
+   if(price>p[2].p&&price<=p[3].p&&k3<=5){welle='WELLE 3 LÄUFT 🚀';bonus=15;}
+   else if(price<p[3].p&&price>p[4].p*0.98){welle='WELLE 4 LÄUFT ⏳';bonus=-8;}
+   else if(price>p[4].p&&price<p[5].p&&k4<=10){welle='WELLE 5 LÄUFT 🔴';bonus=-10;}
+   else{welle='WELLE 5 ABGESCHLOSSEN ✅';bonus=-5;}
+  }else{z3=p[2].p-w1*1.618;z5=p[4].p-w1*1.618;
+   if(price<p[2].p&&price>=p[3].p&&k3<=5){welle='WELLE 3 LÄUFT 🔴';bonus=15;}
+   else if(price>p[3].p&&price<p[4].p*1.02){welle='WELLE 4 LÄUFT ⏳';bonus=-8;}
+   else if(price<p[4].p&&price>p[5].p&&k4<=10){welle='WELLE 5 LÄUFT 🔴';bonus=-10;}
+   else{welle='WELLE 5 ABGESCHLOSSEN ✅';bonus=-5;}
   }
-  let cand={richtung:up?'AUFWÄRTS':'ABWÄRTS',p0:p[0],p1:p[1],p2:p[2],p3:p[3],p4:p[4],p5:p[5],w1,w2,w3,w4,w5,regel2:rg2,regel3:rg3,regel4:rg4,welle,fazit,bonus,preis,zielW3:z3,zielW5_100:z51,zielW5_1618:z516,score:sc,r2Ret:r2,w3Ratio:r3,w5Ratio:r5,w4Ret:r4};
-  if(sc>bs){bs=sc;best=cand;}}
- return best;}
-function showEl(e,myCoin){if(!e){$('elBox').innerHTML='Kein <b>gültiger</b> Elliott-Impuls.';$('elDet').innerHTML='';$('elTg').innerHTML='Kein Elliott-Ziel.';$('elRu').innerHTML='';elS='KEIN ELLIOTT';$('elIn').value='KEIN ELLIOTT';$('elZ').value='';return;}elD=e;elS=e.welle;let s=st(myCoin),f=e.welle.includes('WELLE 3')&&e.richtung==='AUFWÄRTS'?'#22c55e':e.welle.includes('WELLE 5')?'#ef4444':'#facc15';$('elBox').innerHTML='<b style="color:'+f+'">'+e.welle+'</b><br>'+e.fazit+'<br><span style="font-size:12px;color:#aaa">Score: '+Math.min(100,e.score).toFixed(0)+'/100 | Preis: '+e.preis.toFixed(s)+' $</span>';$('elDet').innerHTML='<div class="fr"><span>0 → 1</span><span>'+e.p0.preis.toFixed(s)+' → '+e.p1.preis.toFixed(s)+'</span><span>'+e.w1.toFixed(s)+' $ (100%)</span></div><div class="fr"><span>1 → 2</span><span>'+e.p1.preis.toFixed(s)+' → '+e.p2.preis.toFixed(s)+'</span><span>'+e.w2.toFixed(s)+' $ = '+(e.r2Ret*100).toFixed(1)+'% '+(e.r2Ret>=0.382&&e.r2Ret<=0.786?'✅':'⚠️')+'</span></div><div class="fr"><span>2 → 3 ⭐</span><span>'+e.p2.preis.toFixed(s)+' → '+e.p3.preis.toFixed(s)+'</span><span>'+e.w3.toFixed(s)+' $ = '+(e.w3Ratio*100).toFixed(0)+'% '+(e.w3Ratio>=1.3&&e.w3Ratio<=2?'✅':'⚠️')+'</span></div><div class="fr"><span>3 → 4</span><span>'+e.p3.preis.toFixed(s)+' → '+e.p4.preis.toFixed(s)+'</span><span>'+e.w4.toFixed(s)+' $ = '+(e.w4Ret*100).toFixed(1)+'% '+(e.w4Ret>=0.236&&e.w4Ret<=0.5?'✅':'⚠️')+'</span></div><div class="fr"><span>4 → 5</span><span>'+e.p4.preis.toFixed(s)+' → '+e.p5.preis.toFixed(s)+'</span><span>'+e.w5.toFixed(s)+' $ = '+(e.w5Ratio*100).toFixed(0)+'% '+(e.w5Ratio>=0.618&&e.w5Ratio<=1.618?'✅':'⚠️')+'</span></div>';
- let w3Erreicht = e.richtung==='AUFWÄRTS' ? (e.p3.preis>=e.zielW3) : (e.p3.preis<=e.zielW3);
- let w3t=w3Erreicht?'W3-Ziel 1.618 ('+e.zielW3.toFixed(s)+' $) schon erreicht ✅ - Extrem war '+e.p3.preis.toFixed(s)+' $':'W3-Ziel: <b>'+e.zielW3.toFixed(s)+' $</b> - noch nicht erreicht';
- $('elTg').innerHTML='<b>🎯 ELLIOTT ZIELE:</b><br>'+w3t+'<br>W5 Ziel 1.0: <b>'+e.zielW5_100.toFixed(s)+' $</b><br>W5 Ziel 1.618: <b>'+e.zielW5_1618.toFixed(s)+' $</b> ⭐';$('elZ').value='W3: '+e.zielW3.toFixed(s)+' $ | W5: '+e.zielW5_1618.toFixed(s)+' $';$('elRu').innerHTML='W2<100%: '+(e.regel2?'✅ '+(e.r2Ret*100).toFixed(1)+'%':'❌')+' | W3 nie kürzeste: '+(e.regel3?'✅':'❌')+' | W4 kein Overlap: '+(e.regel4?'✅':'❌');$('elIn').value=e.welle;}
-function abcCalc(c){if(!c||c.length<50)return null;let pv=piv(c,3,3);if(pv.length<4)return null;let p=pv.slice(-4),preis=c[c.length-1].close,s=st(coin),st0=p[0],a=p[1],b=p[2];let dn=(st0.typ==='HOCH'&&a.typ==='TIEF'&&b.typ==='HOCH'),up=(st0.typ==='TIEF'&&a.typ==='HOCH'&&b.typ==='TIEF');if(!dn&&!up)return null;if(dn){let len=st0.preis-a.preis,z1=b.preis-len,z16=b.preis-len*1.618,z07=b.preis-len*.786,welle,fazit,bonus;if(preis>b.preis){welle='ABC ABGESCHLOSSEN ✅';fazit='ABC fertig!';bonus=12;}else if(Math.abs(preis-z1)/z1<0.02||Math.abs(preis-z16)/z16<0.02){welle='WELLE C - ENDE NAHE 🎯';fazit='Fast am C-Ziel!';bonus=10;}else if(preis<b.preis&&preis>a.preis){welle='WELLE B LÄUFT ⏳';fazit='In B. Nicht kaufen!';bonus=-8;}else if(preis<a.preis){welle='WELLE C LÄUFT 🔴';fazit='In C. Ziel '+z1.toFixed(s)+' $';bonus=-5;}else{welle='ABC UNKLAR';fazit='ABC erkennbar.';bonus=0;}return{start:st0,a,b,zielC_100:z1,zielC_1618:z16,zielC_0786:z07,welle,fazit,scoreBonus:bonus,preis};}
- if(up){let len=a.preis-st0.preis,z1=b.preis+len,z16=b.preis+len*1.618,z07=b.preis+len*.786,welle,fazit,bonus;if(preis<b.preis){welle='ABC ABGESCHLOSSEN ✅';fazit='ABC fertig.';bonus=-12;}else if(Math.abs(preis-z1)/z1<0.02||Math.abs(preis-z16)/z16<0.02){welle='WELLE C - ENDE NAHE 🎯';fazit='Fast am C-Ziel!';bonus=-10;}else if(preis>b.preis&&preis<a.preis){welle='WELLE B LÄUFT ⏳';fazit='In B.';bonus=8;}else if(preis>a.preis){welle='WELLE C LÄUFT 🟢';fazit='In C hoch.';bonus=5;}else{welle='ABC UNKLAR';fazit='ABC erkennbar.';bonus=0;}return{start:st0,a,b,zielC_100:z1,zielC_1618:z16,zielC_0786:z07,welle,fazit,scoreBonus:bonus,preis};}return null;}
-function showABC(a){if(!a){$('abBox').innerHTML='Kein klares ABC.';$('abTg').innerHTML='Kein ABC-Ziel.';abcS='KEIN ABC';return;}let s=st(coin);abcD=a;abcS=a.welle;$('abBox').innerHTML='<b>'+a.welle+'</b><br>'+a.fazit+'<br>Start '+a.start.preis.toFixed(s)+' $ | A '+a.a.preis.toFixed(s)+' $ | B '+a.b.preis.toFixed(s)+' $';$('abTg').innerHTML='<b>🎯 ABC:</b><br>C 0.786: <b>'+a.zielC_0786.toFixed(s)+' $</b><br>C 1.0: <b>'+a.zielC_100.toFixed(s)+' $</b> ⭐<br>C 1.618: <b>'+a.zielC_1618.toFixed(s)+' $</b>';$('abIn').value=a.welle;$('abZ').value='C 1.0 = '+a.zielC_100.toFixed(s)+' $ | C 1.618 = '+a.zielC_1618.toFixed(s)+' $';}
-function drawF(c,rec,full){let el=$('chart');if(!ch){ch=LightweightCharts.createChart(el,{layout:{background:{color:'#0d1117'},textColor:'#c9d1d9'},grid:{vertLines:{color:'#161b22'},horzLines:{color:'#161b22'}},timeScale:{timeVisible:true},width:el.clientWidth,height:340});cs=ch.addCandlestickSeries({upColor:'#26a69a',downColor:'#ef5350',wickUpColor:'#26a69a',wickDownColor:'#ef5350'});}let show=mode==='full'?c:c.slice(-120);cs.setData(show);lines.forEach(l=>{try{cs.removePriceLine(l)}catch(e){}});lines=[];if(full)Object.keys(full.levels).forEach(k=>{lines.push(cs.createPriceLine({price:full.levels[k],color:k==='0.618'?'#f97316':'#3b82f6',lineWidth:(k==='0.382'||k==='0.618')?3:2,lineStyle:0,axisLabelVisible:true,title:'FULL '+k}));});if(rec)Object.keys(rec.levels).forEach(k=>{lines.push(cs.createPriceLine({price:rec.levels[k],color:'#facc15',lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'SWING '+k}));});if(elD)[elD.p1.preis,elD.p3.preis,elD.p5.preis].forEach((z,i)=>{lines.push(cs.createPriceLine({price:z,color:'#22c55e',lineWidth:2,lineStyle:0,axisLabelVisible:true,title:'ELLIOTT '+(i===0?'W1':i===1?'W3':'W5')}));});if(abcD)[abcD.zielC_100,abcD.zielC_1618].forEach((z,i)=>{lines.push(cs.createPriceLine({price:z,color:'#3b82f6',lineWidth:2,lineStyle:2,axisLabelVisible:true,title:i===0?'ABC C=1.0':'ABC C=1.618'}));});ch.timeScale().fitContent();}
-function smart(c){if(!c||c.length<30)return;let la=c[c.length-1],lows=c.slice(-21,-1).map(x=>x.low),highs=c.slice(-21,-1).map(x=>x.high),mn=Math.min(...lows),mx=Math.max(...highs);swS=la.low<mn&&la.close>mn&&la.close>la.open?'BULLISH SWEEP 🟢🟢':la.high>mx&&la.close<mx&&la.close<la.open?'BEARISH SWEEP 🔴🔴':'KEIN SWEEP';let c1=c[c.length-3],c3=c[c.length-1];fvgS=c1.high<c3.low?'BULLISH FVG 🟢':c1.low>c3.high?'BEARISH FVG 🔴':'KEIN FVG';$('smBox').innerHTML='<b>'+swS+'</b>';$('fvgBox').innerHTML=fvgS;}
-async function fundC(myCoin){try{let j=await fj('https://api.binance.com/api/v3/ticker/24hr?symbol='+myCoin+'USDT','Ticker');if(j&&j.priceChangePercent){let ch=+j.priceChangePercent;fund=ch*.01;fundS=fund<-.05?'EXTREM NEGATIV 🟢':fund<-.01?'NEGATIV 🟢':fund>.05?'EXTREM POSITIV 🔴':fund>.01?'POSITIV 🔴':'NEUTRAL';return;}}catch(e){}fund=0;fundS='NEUTRAL';}
-function scoreCalc(sig,rsi,macd,inGold,btcSig){let sc=50,det=[];if(sig==='BULLISCH'){sc+=15;det.push('Fibo BULLISCH +15');}if(sig==='BÄRISCH'){sc-=15;det.push('Fibo BÄRISCH -15');}if(inGold&&rsi<45){sc+=10;det.push('Golden +10');}if(inGold&&rsi>55){sc-=10;det.push('Golden -10');}if(rsi<30){sc+=12;det.push('RSI überverkauft +12');}else if(rsi<40){sc+=6;det.push('RSI tief +6');}else if(rsi>70){sc-=12;det.push('RSI überkauft -12');}else if(rsi>60){sc-=6;det.push('RSI hoch -6');}if(macd>0){sc+=5;det.push('MACD +5');}else{sc-=5;det.push('MACD -5');}if(btcSig==='BULLISCH'){sc+=10;det.push('BTC +10');}if(btcSig==='BÄRISCH'){sc-=10;det.push('BTC -10');}if(divS.includes('BULLISCHE')){sc+=12;det.push('Bull Div +12');}if(divS.includes('BÄRISCHE')){sc-=12;det.push('Bär Div -12');}if(volS.includes('ECHT')){sc+=8;det.push('Vol ECHT +8');}if(volS.includes('FAKE')){sc-=10;det.push('Vol FAKE -10');}if(volS.includes('PANIK')){sc-=8;det.push('Vol PANIK -8');}if(swS.includes('BULLISH')){sc+=18;det.push('Sweep +18');}if(swS.includes('BEARISH')){sc-=18;det.push('Sweep -18');}if(fund<-.05){sc+=10;det.push('Funding +10');}if(fund>.05){sc-=10;det.push('Funding -10');}if(abcD&&abcD.scoreBonus){sc+=abcD.scoreBonus;det.push('ABC '+abcD.welle+' '+abcD.scoreBonus);}if(elD&&elD.bonus){sc+=elD.bonus;det.push('Elliott '+elD.welle+' '+elD.bonus);}if(usdtS.includes('BULLISCH')){sc+=12;det.push('USDT.D FÄLLT +12');}if(usdtS.includes('BÄRISCH')){sc-=12;det.push('USDT.D STEIGT -12');}if(altS.includes('ALTSEASON')){sc+=15;det.push('ALTSEASON +15');}if(altS.includes('ALTS STARK')){sc+=8;det.push('ALTS STARK +8');}if(altS.includes('BTC SEASON')){sc-=10;det.push('BTC SEASON -10');}if(altS.includes('ALT CRASH')){sc-=15;det.push('ALT CRASH -15');}let g=LA['1M']?LA['1M'].signal:(LA['1w']?LA['1w'].signal:null);if(g&&g===sig){sc+=10;det.push('1M/1W bestätigt +10');}if(g&&g!==sig&&g!=='BODENBILDUNG'){sc-=10;det.push('1M/1W gegen dich -10');}sc=Math.max(0,Math.min(100,sc));let txt=sc>=80?'STARK KAUFEN 🚀':sc>=65?'KAUFEN 🟢':sc>=45?'NEUTRAL / WARTEN 🟡':sc>=30?'VERKAUFEN 🔴':'STARK VERKAUFEN 💥',far=sc>=65?'#22c55e':sc>=45?'#facc15':'#ef4444',bd='<span class="badge '+(sc>=65?'gr':sc>=45?'ye':'re')+'">'+txt+'</span>';$('scBig').innerText=sc;$('scBig').style.color=far;$('scBd').innerHTML=bd;$('scBar').style.width=sc+'%';$('scBar').style.background=far;$('scDet').innerHTML=det.join('<br>');return sc;}
-async function btcCheck(myToken){try{let c=await getK('BTCUSDT','1h','1h');if(myToken!==loadToken)return false;if(c&&c.length>50){let cl=c.map(x=>x.close);btcP=cl[cl.length-1];btcR=rsiCalc(cl,14);let e=ema(cl,50);btcS=btcP>e&&btcR>50?'BULLISCH':btcP<e&&btcR<50?'BÄRISCH':'NEUTRAL';let f=btcS==='BULLISCH'?'#22c55e':btcS==='BÄRISCH'?'#ef4444':'#facc15';$('btcBox').innerHTML='<b style="color:'+f+'">BTC: '+btcS+'</b> - '+btcP.toFixed(0)+' $ | RSI '+btcR.toFixed(1);return true;}}catch(e){}return false;}
-async function volCheck(myCoin,myTf,myToken){try{let c=await getK(myCoin+'USDT',{'15m':'15m','1h':'1h','1d':'1d','1w':'1w','1M':'1M'}[myTf],myTf);if(myToken!==loadToken)return false;if(!c||c.length<10)throw 0;let v=c.slice(-50).map(x=>x.vol||0),cl=c.slice(-50).map(x=>x.close),sn=v.slice(0,40).reduce((a,b)=>a+b,0)/40,jt=v[v.length-1],st=cl[cl.length-1]>cl[cl.length-2];volS=st&&jt>sn*1.2?'ECHT ✅':st&&jt<sn*.8?'FAKE ⚠️':!st&&jt>sn*1.5?'PANIK 🔴':'NEUTRAL';$('volIn').value=volS;return true;}catch(e){volS='Volumen nicht ladbar';$('volIn').value=volS;return false;}}
-function divCalc(cl){if(!cl||cl.length<30)return 'KEINE';let l=cl.slice(-30),e=l.slice(0,15),z=l.slice(15),t1=Math.min(...e),t2=Math.min(...z),h1=Math.max(...e),h2=Math.max(...z),r1=rsiCalc(cl.slice(0,cl.length-15),14),r2=rsiCalc(cl,14);if(t2<t1&&r2>r1)return 'BULLISCHE DIVERGENZ 🟢';if(h2>h1&&r2<r1)return 'BÄRISCHE DIVERGENZ 🔴';return 'KEINE';}
-async function scan(){let box=$('scanBox');box.innerHTML='⏳ Scanne 14 Coins...';let res=[],oc=coin,ot=tf;for(let i=0;i<COINS.length;i++){let c=COINS[i];box.innerHTML='⏳ '+(i+1)+'/14: <b>'+c+'</b> ...';try{let c1=await getK(c+'USDT','1d','1d');let cw=await getK(c+'USDT','1w','1w');let e1=(c1&&c1.length>=80)?elliott(c1,c):null,eW=(cw&&cw.length>=80)?elliott(cw,c):null;let pr=c1&&c1.length?c1[c1.length-1].close:0,rs=c1&&c1.length?rsiCalc(c1.map(x=>x.close),14):50;let u1=e1&&e1.welle.includes('WELLE 3')&&e1.richtung==='AUFWÄRTS',uW=eW&&eW.welle.includes('WELLE 3')&&eW.richtung==='AUFWÄRTS';res.push({coin:c,preis:pr,rsi:rs,e1:e1?e1.welle:'KEIN',eW:eW?eW.welle:'KEIN',u1,uW,ziel:e1?e1.zielW3:0});}catch(e){res.push({coin:c,preis:0,rsi:50,e1:'FEHLER',eW:'FEHLER',u1:false,uW:false,ziel:0});}await new Promise(r=>setTimeout(r,150));}coin=oc;tf=ot;let echt=res.filter(r=>r.u1&&r.uW);let h='<div style="background:#22c55e;color:#000;border-radius:10px;padding:10px;text-align:center;font-weight:800">🟢 ECHTE WELLE-3 (1D+1W): '+echt.length+' / 14</div>';echt.forEach(r=>{h+='<div style="background:#052e16;border:2px solid #22c55e;border-radius:10px;padding:10px;margin-top:8px"><b>🟢 '+r.coin+' - WELLE 3 HOCH 🚀</b><br>Preis '+r.preis.toFixed(st(r.coin))+' $ | RSI '+r.rsi.toFixed(1)+'<br>1D: '+r.e1+'<br>1W: '+r.eW+'<br><button onclick="setCoin(\''+r.coin+'\')" style="background:#22c55e;color:#000;margin-top:6px">👉 '+r.coin+' ANALYSIEREN</button></div>';});if(!echt.length)h+='<div style="margin-top:8px">Kein Coin auf BEIDEN in Welle 3 hoch.</div>';h+='<div style="margin-top:10px"><b>Alle:</b><table>';res.forEach(r=>{h+='<tr><td><b>'+r.coin+'</b></td><td>'+r.preis.toFixed(st(r.coin))+' $</td><td>'+r.e1+'</td><td>'+r.eW+'</td></tr>';});h+='</table></div>';box.innerHTML=h;log('✅ Scan fertig '+echt.length+' echte');}
+  best={dir:up?'AUF':'AB',welle,bonus,z3,z5,p,score:sc,r2,r3,r4,r5};
+ }
+ return best;
+}
+function detectABC(candles){
+ if(candles.length<50)return null;
+ let pivs=[];for(let i=3;i<candles.length-3;i++){
+  let h=true,l=true;for(let j=1;j<=3;j++){if(candles[i].high<candles[i-j].high||candles[i].high<candles[i+j].high)h=false;if(candles[i].low>candles[i-j].low||candles[i].low>candles[i+j].low)l=false;}
+  if(h)pivs.push({i,p:candles[i].high,t:'H'});if(l)pivs.push({i,p:candles[i].low,t:'T'});
+ }
+ pivs.sort((a,b)=>a.i-b.i);let f=[];for(let x of pivs){if(!f.length||f[f.length-1].t!==x.t)f.push(x);else{let la=f[f.length-1];if(x.t==='H'&&x.p>la.p)f[f.length-1]=x;if(x.t==='T'&&x.p<la.p)f[f.length-1]=x;}}
+ if(f.length<4)return null;let p=f.slice(-4),price=candles[candles.length-1].close;
+ let dn=p[0].t==='H'&&p[1].t==='T'&&p[2].t==='H',up=p[0].t==='T'&&p[1].t==='H'&&p[2].t==='T';
+ if(!dn&&!up)return null;
+ if(dn){let len=p[0].p-p[1].p,z1=p[2].p-len,z16=p[2].p-len*1.618;let w=price>p[2].p?'ABC ABGESCHLOSSEN ✅':price>p[1].p?'WELLE B LÄUFT ⏳':'WELLE C LÄUFT 🔴';return {welle:w,z1,z16};}
+ else{let len=p[1].p-p[0].p,z1=p[2].p+len,z16=p[2].p+len*1.618;let w=price<p[2].p?'ABC ABGESCHLOSSEN ✅':price<p[1].p?'WELLE B LÄUFT ⏳':'WELLE C LÄUFT 🟢';return {welle:w,z1,z16};}
+}
+function drawChart(){
+ let el=$('chart');
+ if(!chart){chart=LightweightCharts.createChart(el,{layout:{background:{color:'#0b0d12'},textColor:'#aaa'},grid:{vertLines:{color:'#1a1d25'},horzLines:{color:'#1a1d25'}},timeScale:{timeVisible:true},width:el.clientWidth,height:320});series=chart.addCandlestickSeries({upColor:'#00e676',downColor:'#ff5252',wickUpColor:'#00e676',wickDownColor:'#ff5252'});}
+ series.setData(state.candles);
+ priceLines.forEach(l=>{try{series.removePriceLine(l)}catch(e){}});priceLines=[];
+ if(state.fib)Object.keys(state.fib).forEach(k=>{priceLines.push(series.createPriceLine({price:state.fib[k],color:k==='0.618'?'#ff6d00':'#2962ff',lineWidth:(k==='0.382'||k==='0.618')?3:1,lineStyle:0,axisLabelVisible:true,title:'FIBO '+k}));});
+ chart.timeScale().fitContent();
+}
 async function load(){
- loadToken++;let myToken=loadToken,myCoin=coin,myTf=tf;
- let inter={'15m':'15m','1h':'1h','1d':'1d','1w':'1w','1M':'1M'}[myTf];let t0=Date.now();log('--- Lade '+myCoin+' '+TFL[myTf]+' (Token '+myToken+') ---');
- dom().catch(()=>{});
- let c=await getK(myCoin+'USDT',inter,myTf);
- if(myToken!==loadToken){log('⏭️ Verworfen, jetzt '+coin+' '+tf);return null;}
- if(!c||c.length<20){$('rsiVer').innerText='❌ Keine Klines für '+myCoin+' '+TFL[myTf]+'! Siehe DEBUG.';hasLive=false;calc();return null;}
- hasLive=true;
- let cl=c.map(x=>x.close),r=rsiCalc(cl,14),macd=(ema(cl,12)-ema(cl,26))*.1,preis=cl[cl.length-1];
- let sf=swingF(c),ff=fibo(sf.hi,sf.lo,sf.up);fibF={levels:ff.levels,diff:ff.diff};let sr=swingR(c),fr=fibo(sr.hi,sr.lo,sr.up);fibD={levels:fr.levels,diff:fr.diff};lastH=sf.hi;lastT=sf.lo;candles=c;
- showEl(elliott(c,myCoin),myCoin);showABC(abcCalc(c));drawF(c,fibD,fibF);let s2=st(myCoin);$('sH').value=lastH.toFixed(s2);$('sT').value=lastT.toFixed(s2);$('fibInfo').innerHTML='🔵 FULL: '+sf.hi.toFixed(s2)+' / '+sf.lo.toFixed(s2)+' | '+c.length+' Kerzen<br>🟠 SWING: '+sr.hi.toFixed(s2)+' / '+sr.lo.toFixed(s2)+' | Preis: <b>'+preis.toFixed(s2)+' $</b>';
- let loF=Math.min(fibF.levels['0.382'],fibF.levels['0.618']),hiF=Math.max(fibF.levels['0.382'],fibF.levels['0.618']),posF=(preis>=loF&&preis<=hiF)?'🎯 IN FULL GOLDEN!':preis>hiF?'Über FULL Golden':'Unter FULL Golden';$('fibBox').innerHTML='<b>🔵 FULL Golden: '+loF.toFixed(s2)+' - '+hiF.toFixed(s2)+' $</b><br>Preis '+preis.toFixed(s2)+' - '+posF;let lo=Math.min(fibD.levels['0.382'],fibD.levels['0.618']),hi=Math.max(fibD.levels['0.382'],fibD.levels['0.618']),pos=(preis>=lo&&preis<=hi)?'🎯 IN SWING GOLDEN!':preis>hi?'Über Swing':'Unter Swing';$('fibPos').value=pos+' | FULL: '+posF;log('✅ '+myCoin+' OK: '+preis.toFixed(s2)+' $ RSI '+r.toFixed(1)+' von '+src+' in '+((Date.now()-t0)/1000).toFixed(1)+'s');
- await btcCheck(myToken);if(myToken!==loadToken)return null;await volCheck(myCoin,myTf,myToken);if(myToken!==loadToken)return null;divS=divCalc(cl);$('divIn').value=divS;smart(c);await fundC(myCoin);
- $('rsi14').value=r.toFixed(2);$('rsiB').value=src+' - RSI '+r.toFixed(2);$('macd').value=macd.toFixed(4);$('preis').value=preis.toFixed(s2);$('rsiBig').innerText=r.toFixed(1);$('rsiLab').innerText=TFL[myTf]+' - '+myCoin;$('rsiQ').innerText='Quelle: '+src+' | '+c.length+' Kerzen | '+(Date.now()-t0)/1000+'s';let far=r<30?'#22c55e':r<70?'#facc15':'#ef4444';$('rsiBig').style.color=far;$('rsiFill').style.width=r+'%';$('rsiFill').style.background=far;$('rsiBd').innerHTML='<span class="badge '+(r<30?'gr':r<70?'ye':'re')+'">'+(r<30?'ÜBERVERKAUFT!':r<40?'Fast überverkauft':r<50?'Neutral, leicht bärisch':r<70?'Neutral, leicht bullisch':'ÜBERKAUFT!')+'</span>';$('rsiVer').innerText='✅ VERIFIZIERT: '+c.length+' Kerzen via '+src;$('live').innerText='✅ '+new Date().toLocaleTimeString('de-DE')+' - FULL: '+lastH.toFixed(s2)+' / '+lastT.toFixed(s2);$('lu').innerText=new Date().toLocaleTimeString('de-DE');allR[myCoin]={rsi:r,preis:preis};updAll();calc();return r;}
-async function loadAll(){$('allC').innerText='⏳ Scanne...';let inter={'15m':'15m','1h':'1h','1d':'1d','1w':'1w','1M':'1M'}[tf];for(let c of COINS){let k=await getK(c+'USDT',inter,tf);if(k.length){let cl=k.map(x=>x.close);allR[c]={rsi:rsiCalc(cl,14),preis:cl[cl.length-1]};}}updAll();}
-function updAll(){let h='<table><tr><td><b>Coin</b></td><td><b>Preis</b></td><td><b>RSI</b></td><td><b>Status</b></td></tr>';for(let c of COINS){if(allR[c]){let r=allR[c].rsi;h+='<tr><td><b>'+c+'</b></td><td>'+allR[c].preis.toFixed(st(c))+' $</td><td><b>'+r.toFixed(1)+'</b></td><td>'+(r<30?'🟢 Überverkauft':r<40?'🟡 Fast':r<70?'⚪ Neutral':'🔴 Überkauft')+'</td></tr>';}else h+='<tr><td><b>'+c+'</b></td><td>-</td><td>-</td><td>Noch nicht gescannt</td></tr>';}h+='</table>';$('allC').innerHTML=h;}
-function buildCoins(){let h='';COINS.forEach(c=>{h+='<button data-c="'+c+'" class="'+(c===coin?'on':'')+'" onclick="setCoin(\''+c+'\')">'+c+'</button>';});$('coins').innerHTML=h;}
-function setTF(t){tf=t;document.querySelectorAll('[data-tf]').forEach(b=>b.classList.toggle('on2',b.dataset.tf===t));cd=TFU[t]||1800;lastH=0;lastT=0;fibD=null;fibF=null;abcD=null;elD=null;updateLabels();calc();load();}
-function setCoin(c){coin=c;buildCoins();$('coinInfo').innerHTML=INFO[c]||'';lastH=0;lastT=0;fibD=null;fibF=null;abcD=null;elD=null;updateLabels();calc();load();}
-function startCd(){if(timer)clearInterval(timer);timer=setInterval(()=>{cd--;if(cd<=0){cd=TFU[tf]||1800;load();}let m=Math.floor(cd/60),s=cd%60;let hh=Math.floor(cd/3600);$('cd').innerText=cd>=3600?hh+':'+String(Math.floor((cd%3600)/60)).padStart(2,'0')+':'+String(s).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');},1000);}
+ syncHeads();
+ let interval={'15m':'15m','1h':'1h','1d':'1d','1w':'1w','1M':'1M'}[tf];
+ let gran={'15m':900,'1h':3600,'1d':86400,'1w':604800,'1M':2592000}[tf];
+ log('Lade '+coin+' '+tfLabel(tf)+' von Binance...');
+ let res=await getKlines(coin+'USDT',interval,gran);
+ if(!res.data.length){$('statusLine').textContent='❌ Keine Daten - tippe QUELLEN TESTEN';$('signalReason').textContent='Keine Klines. Binance / Coinbase blockieren gerade.';calc();return;}
+ let closes=res.data.map(x=>x.close);
+ let price=closes[closes.length-1];
+ let r=rsiCalc(closes,14);
+ let macd=(ema(closes,12)-ema(closes,26))*0.1;
+ let sw=findSwing(res.data);
+ let fib=calcFibo(sw.high,sw.low,sw.up);
+ let ell=detectElliott(res.data);
+ let abc=detectABC(res.data);
+ // BTC + Vol + Div
+ let btcRes=await getKlines('BTCUSDT','1h',3600);
+ let btcTrend='NEUTRAL',btcPrice=0,btcRsi=50;
+ if(btcRes.data.length>50){let bc=btcRes.data.map(x=>x.close);btcPrice=bc[bc.length-1];btcRsi=rsiCalc(bc,14);let e=ema(bc,50);btcTrend=btcPrice>e&&btcRsi>50?'BULLISCH':btcPrice<e&&btcRsi<50?'BÄRISCH':'NEUTRAL';}
+ let vols=res.data.slice(-50).map(x=>x.vol||0),avg=vols.slice(0,40).reduce((a,b)=>a+b,0)/40,lastV=vols[vols.length-1],upDay=price>closes[closes.length-2];
+ let vol=upDay&&lastV>avg*1.2?'ECHT ✅':upDay&&lastV<avg*0.8?'FAKE ⚠️':!upDay&&lastV>avg*1.5?'PANIK 🔴':'NEUTRAL';
+ let div='KEINE';if(closes.length>=30){let a=closes.slice(-30,-15),b=closes.slice(-15);let t1=Math.min(...a),t2=Math.min(...b),h1=Math.max(...a),h2=Math.max(...b);let r1=rsiCalc(closes.slice(0,closes.length-15),14);if(t2<t1&&r>r1)div='BULLISCHE DIVERGENZ 🟢';else if(h2>h1&&r<r1)div='BÄRISCHE DIVERGENZ 🔴';}
+ // Dominanz
+ let dom={btc:0,usdt:0,alt:0};try{let g=await fetchJson('https://api.coinpaprika.com/v1/global');if(g){dom.btc=g.bitcoin_dominance_percentage||0;dom.usdt=4.5;dom.alt=100-dom.btc-12-dom.usdt;}}catch(e){}
+ state={price,rsi:r,macd,high:sw.high,low:sw.low,fib,swingHigh:sw.high,swingLow:sw.low,elliott:ell,abc,btc:{price:btcPrice,rsi:btcRsi,trend:btcTrend},vol,div,dom,candles:res.data};
+ $('priceBig').textContent=fmt(price);
+ $('priceSrc').textContent='Quelle: '+res.src+' • '+res.data.length+' Kerzen';
+ $('rsiBig').textContent=r.toFixed(1);
+ $('rsiBig').style.color=r<30?'#00e676':r<70?'#ffca28':'#ff5252';
+ $('rsiBar').style.width=r+'%';$('rsiBar').style.background=r<30?'#00e676':r<70?'#ffca28':'#ff5252';
+ $('rsiBadge').textContent=r<30?'ÜBERVERKAUFT!':r<40?'Fast überverkauft':r<50?'Neutral, leicht bärisch':r<70?'Neutral, leicht bullisch':'ÜBERKAUFT!';
+ $('rsiBadge').className='badge '+(r<30?'g':r<70?'y':'r');
+ $('fibInfo').textContent='FULL Swing: '+fmt(sw.high)+' / '+fmt(sw.low)+' • Preis: '+fmt(price);
+ $('statusLine').textContent='✅ '+coin+' '+tfLabel(tf)+' geladen via '+res.src+' • '+new Date().toLocaleTimeString('de-DE');
+ log('✅ '+coin+' OK: '+price.toFixed(dec(coin))+' $ RSI '+r.toFixed(1)+' via '+res.src);
+ drawChart();
+ calc();
+}
 function calc(){
- let ein0=num($('einstieg').value);
- let preis=num($('preis').value);
- let isFallback=false;
- if(!preis){if(ein0>0){preis=ein0;isFallback=true;}else{preis=2.6;isFallback=true;}}
- let rsi14=num($('rsi14').value)||50,rsiB=num($('rsi14').value)||rsi14,macd=num($('macd').value)||0,ein=ein0||preis,s=st(coin);
- let fib=fibF?fibF.levels:(fibD?fibD.levels:null),hochF=lastH,tiefF=lastT;
- if(!fib || !hochF || !tiefF){hochF=preis*1.15;tiefF=preis*0.85;let d=hochF-tiefF;fib={'0':hochF,'0.236':hochF-d*.236,'0.382':hochF-d*.382,'0.5':hochF-d*.5,'0.618':hochF-d*.618,'0.786':hochF-d*.786,'1':tiefF,'-0.272':hochF+d*.272,'-0.618':hochF+d*.618};}
- let diff=hochF-tiefF,pB=0,pBa=0;if(preis>fib['0.382'])pB++;else pBa++;if(preis>fib['0.5'])pB++;else pBa++;let inGold=preis>=Math.min(fib['0.382'],fib['0.618'])&&preis<=Math.max(fib['0.382'],fib['0.618']);if(inGold&&rsiB<45)pB++;if(inGold&&rsiB>55)pBa++;if(rsiB<30)pB+=2;else if(rsiB<40)pB++;else if(rsiB>70)pBa+=2;else if(rsiB>60)pBa++;if(macd>0)pB++;else pBa++;
- let sigK,signal,badge,begr;if(pB>=3&&pBa<=1){sigK='BULLISCH';signal='🟢 BULLISCH';badge='<span class="badge gr">BULLISCH</span>';begr='Preis über Fibo 0.382 ('+fib['0.382'].toFixed(s)+' $), RSI '+rsiB.toFixed(1)+' und MACD passen.';}else if(pBa>=3&&pB<=1){sigK='BÄRISCH';signal='🔴 BÄRISCH';badge='<span class="badge re">BÄRISCH</span>';begr='Preis unter Fibo 0.382, RSI '+rsiB.toFixed(1)+' zeigt runter.';}else{sigK='BODENBILDUNG';signal='🟡 NEUTRAL / BODENBILDUNG';badge='<span class="badge ye">BODENBILDUNG</span>';begr='Widerspruch: Preis vs RSI. Warten.';}
- if(isFallback) begr+=' ⚠️ FALLBACK: Noch keine Live-Daten.';
- LA[tf]={signal:sigK,rsi14:rsi14,preis:preis};let drei='',ok=true;let tfs=['15m','1h','1d','1w','1M'];let alle=tfs.every(t=>LA[t]);if(alle){let sg=tfs.map(t=>LA[t].signal);if(sg.every(x=>x===sg[0]))drei='✅ ALLE 5 GLEICH: '+sg[0];else{let g=LA['1M'].signal,w=LA['1w'].signal,d=LA['1d'].signal;if(g===w&&w===d)drei='✅ 1M+1W+1D sagen '+d;else if(w===d)drei='⚠️ 1W+1D sagen '+d+', 1M sagt '+g;else{drei='🚫 WIDERSPRUCH - 1M: '+g+' | 1W: '+w+' | 1D: '+d;ok=false;}}}else if(LA['1d']&&LA['1w']&&LA['1M']){drei=LA['1d'].signal===LA['1w'].signal&&LA['1w'].signal===LA['1M'].signal?'✅ 1D+1W+1M GLEICH: '+LA['1d'].signal:'⚠️ 1D: '+LA['1d'].signal+' | 1W: '+LA['1w'].signal+' | 1M: '+LA['1M'].signal;}else drei='⏳ Tipp alle 5 Timeframes einmal an.';
- let btcF='';if(btcS==='BÄRISCH'&&sigK==='BULLISCH'){btcF='🚫 BTC BÄRISCH - blockiert.';ok=false;}else if(btcS==='BULLISCH'&&sigK==='BULLISCH')btcF='✅ BTC BULLISCH - Rückenwind!';else if(btcS==='BÄRISCH'&&sigK==='BÄRISCH')btcF='✅ BTC BÄRISCH - Bestätigt!';else btcF='BTC: '+btcS+' ('+btcP.toFixed(0)+' $)';if(volS.includes('FAKE'))ok=false;if(divS.includes('BÄRISCHE')&&sigK==='BULLISCH')ok=false;
- let fin=ok?'✅ DARFST TRADEN':'🚫 NICHT TRADEN - Blockiert!',finF=ok?'#22c55e':'#ef4444';let score=scoreCalc(sigK,rsiB,macd,inGold,btcS);
- let ent='WARTEN',grund='',entry=preis,stop=0,target=0;let gross=LA['1M']?LA['1M'].signal:(LA['1w']?LA['1w'].signal:null);
- if(gross&&tf!=='1M'&&tf!=='1w'){if(gross==='BÄRISCH'&&sigK==='BULLISCH'){grund='🌍 1M BÄRISCH! Kleiner Trend nur Erholung.';entry=preis;stop=preis*.98;target=preis*1.02;}else if(gross==='BULLISCH'&&sigK==='BÄRISCH'&&tf==='1d'){grund='🌍 1M BULLISCH! 1D BÄRISCH nur Korrektur.';entry=preis;stop=preis*.98;target=preis*1.02;}}
- if(!grund){if(altS==='BTC SEASON 🔴'&&sigK==='BULLISCH'){grund='🌍 BTC SEASON! Kein Long!';entry=preis;stop=preis*.98;target=preis*1.02;}else if(altS==='ALT CRASH 🔴🔴'){grund='🌍 ALT CRASH!';entry=preis;stop=preis*.98;target=preis*1.02;}else if(usdtS==='BÄRISCH FÜR BTC 🔴'&&sigK==='BULLISCH'){grund='💵 USDT.D STEIGT! LONG blockiert!';entry=preis;stop=preis*.98;target=preis*1.02;}else if(!ok){grund='Blockiert: BTC / Volumen sagt NEIN.';entry=preis;stop=preis*.98;target=preis*1.02;}else if(elD&&elD.welle&&(elD.welle.includes('WELLE 2')||elD.welle.includes('WELLE 4'))){grund='Elliott in Welle '+(elD.welle.includes('WELLE 2')?'2':'4')+' - Warte!';entry=preis;stop=preis*.98;target=preis*1.02;}else if(abcD&&abcD.welle&&abcD.welle.includes('WELLE B')){grund='ABC in Welle B. Danach C runter.';entry=preis;stop=preis*.98;target=preis*1.02;}else if(score>=65&&sigK==='BULLISCH'){ent='LONG';grund='Score '+score+' + BULLISCH.';entry=preis;stop=fib['1'];target=fib['0.786'];if(usdtS.includes('BULLISCH'))grund+=' + USDT.D FÄLLT!';if(altS.includes('ALTSEASON'))grund+=' + ALTSEASON!';if(elD&&elD.welle.includes('WELLE 3'))grund+=' + WELLE 3 🚀';}else if(score<=35&&sigK==='BÄRISCH'){ent='SHORT';grund='Score '+score+' + BÄRISCH.';entry=preis;stop=fib['0'];target=fib['1'];}else if(score>=80){ent='LONG';grund='Score '+score+' EXTREM STARK.';entry=preis;stop=fib['1'];target=fib['0.618'];}else if(score<=20){ent='SHORT';grund='Score '+score+' EXTREM SCHWACH.';entry=preis;stop=fib['0'];target=fib['1'];}else{grund=score>=45&&score<65?'Score '+score+' zu schwach für LONG.':sigK==='BODENBILDUNG'?'Signal ist BODENBILDUNG.':'Keine klare Kante.';entry=preis;stop=preis*.98;target=preis*1.02;}}
- lsE=entry;lsS=stop;lsT=target;let risiko=Math.abs(entry-stop),ch=Math.abs(target-entry),crv=risiko>0?(ch/risiko).toFixed(1):'0';let box=$('lsBox');box.className='ls '+(ent==='LONG'?'lg':ent==='SHORT'?'sh':'wt');$('lsLab').innerText=coin+' '+TFL[tf]+' - Score '+score+'/100'+(isFallback?' - FALLBACK':'');$('lsBig').innerHTML=ent==='LONG'?'🟢 LONG':ent==='SHORT'?'🔴 SHORT':'🟡 WARTEN';$('lsSub').innerText=ent==='LONG'?'KAUFEN':ent==='SHORT'?'VERKAUFEN':'FINGER WEG';$('lsGrund').innerText=grund+(isFallback?' | ⚠️ Fallback':'');$('lsE').innerText=entry.toFixed(s)+' $';$('lsS').innerText=stop.toFixed(s)+' $';$('lsT').innerText=target.toFixed(s)+' $';$('lsC').innerText='Risiko: '+(risiko/preis*100).toFixed(1)+'% | Chance: '+(ch/preis*100).toFixed(1)+'% | CRV 1 : '+crv;$('lsIn').value=ent==='LONG'?'🟢 LONG':ent==='SHORT'?'🔴 SHORT':'🟡 WARTEN';
- $('check').innerHTML=(ok?'✅':'🚫')+' <b>'+fin+'</b> | 🧠 Score: <b>'+score+'/100</b> | 👉 <b>'+ent+'</b><br>• 5-Zeiten: '+drei+'<br>• BTC: '+btcF+'<br>• USDT: '+usdtD.toFixed(2)+'% '+usdtT+' → '+usdtS+'<br>• ALT: '+altD.toFixed(2)+'% → '+altS+'<br>• Volumen: '+volS+'<br>• Divergenz: '+divS+'<br>• FULL Fibo: '+hochF.toFixed(s)+' / '+tiefF.toFixed(s)+' | '+(inGold?'IN Golden Zone 🎯':'ausserhalb')+'<br>• Elliott: '+elS+'<br>• ABC: '+abcS+'<br>• Smart Money: '+swS+'<br>• Funding: '+fund.toFixed(4)+' % - '+fundS;
- if(alle){let a=LA['15m'],h=LA['1h'],d=LA['1d'],w=LA['1w'],mo=LA['1M'];let gl=a.signal===h.signal&&h.signal===d.signal&&d.signal===w.signal&&w.signal===mo.signal;let fz,af,at;if(gl&&a.signal==='BULLISCH'){fz='✅ ALLE 5 GLEICH: BULLISCH!';af='#22c55e';at='🟢🟢🟢🟢🟢 ALLE GRÜN - KAUFEN';}else if(gl&&a.signal==='BÄRISCH'){fz='🔴 ALLE 5 GLEICH: BÄRISCH!';af='#ef4444';at='🔴🔴🔴🔴🔴 ALLE ROT - RAUS';}else if(gl){fz='🟡 ALLE 5 GLEICH: BODENBILDUNG';af='#facc15';at='🟡🟡🟡🟡🟡 ALLE GELB - WARTEN';}else if(w.signal===mo.signal&&d.signal===w.signal){fz='✅ 1M+1W+1D einig: '+d.signal;af='#22c55e';at='✅ GROSSER TREND EINIG: '+d.signal;}else{fz='⚠️ WIDERSPRUCH - NICHT TRADEN!';af='#ef4444';at='🚫 WIDERSPRUCH - NICHT TRADEN';}$('vgl').innerHTML='<b>15M:</b> '+a.signal+' | RSI '+a.rsi14.toFixed(1)+'<br><b>1H:</b> '+h.signal+' | RSI '+h.rsi14.toFixed(1)+'<br><b>1D:</b> '+d.signal+' | RSI '+d.rsi14.toFixed(1)+'<br><b>1W:</b> '+w.signal+' | RSI '+w.rsi14.toFixed(1)+'<br><b>1M:</b> '+mo.signal+' | RSI '+mo.rsi14.toFixed(1)+'<br><br><b>'+fz+'</b>';$('ampel').innerHTML='<div style="background:'+af+';color:#000;border-radius:10px;padding:10px;text-align:center;font-weight:800">'+at+'</div>';}
- let lab=TFL[tf],fh='';if(isFallback) fh+='<div class="warn">⚠️ FALLBACK - Keine Live-Daten. Fibo aus Einstieg +/-15%.</div>';fh+='<div style="font-size:13px;color:#3b82f6"><b>🔵 FULL Fibo ('+(candles.length?candles.length+' Kerzen':'Fallback')+'):</b></div>';['0','0.236','0.382','0.5','0.618','0.786','1','-0.272','-0.618'].forEach(f=>{if(fib[f]===undefined)return;let mk=Math.abs(fib[f]-preis)<Math.abs(diff)*.05?'<span class="here">DU BIST HIER</span>':'';fh+='<div class="fr"'+((f==='0.382'||f==='0.618')?' style="background:#f9731622"':'')+'><span>'+f+' Fib ('+lab+')'+((f==='0.382'||f==='0.618')?' ⭐ Golden':'')+'</span><span><b>'+fib[f].toFixed(s)+' $</b> '+mk+'</span></div>';});$('fibList').innerHTML=fh;
- $('erg').innerHTML='<div class="card"><div style="text-align:center;font-size:12px;color:#aaa">'+lab+' - '+coin+' - RSI '+rsiB.toFixed(1)+' | 🧠 Score '+score+'/100 | 👉 '+ent+(isFallback?' | ⚠️ FALLBACK':'')+'</div><div class="big">'+preis.toFixed(s)+' $</div><div style="text-align:center">'+badge+' '+signal+'</div><div style="background:'+finF+';color:#000;border-radius:10px;padding:10px;text-align:center;font-weight:800;margin-top:8px">'+fin+' - '+ent+'</div><div style="text-align:center;margin-top:6px;font-size:13px;color:#aaa">'+begr+'</div><div style="text-align:center;margin-top:6px">Gewinn: '+((preis-ein)/ein*100).toFixed(2)+' %</div></div>';
- $('ana').innerHTML=(isFallback?'<div class="warn">⚠️ FALLBACK - Keine Live-Daten. Analyse aus Einstieg '+preis.toFixed(s)+' $.</div>':'')+'<div style="background:'+finF+';color:#000;border-radius:10px;padding:10px;text-align:center;font-weight:800">'+fin+' | 👉 '+ent+' | 🧠 Score '+score+'/100</div><div style="margin-top:8px"><b>👉 LONG / SHORT:</b> '+ent+'<br>Eintritt: '+lsE.toFixed(s)+' $ | Stop: '+lsS.toFixed(s)+' $ | Ziel: '+lsT.toFixed(s)+' $</div><div><b>🧠 Score:</b> '+score+'/100</div><div><b>🌊 Elliott:</b> '+elS+'</div><div><b>🔤 ABC:</b> '+abcS+'</div><div><b>🔥 Smart Money:</b> '+swS+'<br>'+fvgS+'</div><div><b>💰 Funding:</b> '+fund.toFixed(4)+' % - '+fundS+'</div><div><b>📐 FULL Fibo:</b> '+hochF.toFixed(s)+' $ / '+tiefF.toFixed(s)+' $</div><div><b>2. 5-Zeiten:</b> '+drei+'</div><div><b>3. Divergenz:</b> '+divS+'</div><div><b>4. Volumen:</b> '+volS+'</div><div><b>5. BTC:</b> '+btcF+'</div>';
- let elP=elD?'<br>🌊 Elliott: '+elD.welle+' | W3: '+elD.zielW3.toFixed(s)+' $ | W5: '+elD.zielW5_1618.toFixed(s)+' $':'';let abP=abcD?'<br>🔤 ABC-Ziel C: 1.0 = '+abcD.zielC_100.toFixed(s)+' $ | 1.618 = '+abcD.zielC_1618.toFixed(s)+' $':'';$('plan').innerHTML=(isFallback?'<div class="warn">⚠️ FALLBACK-PLAN - Ohne Live-Daten. Nur zur Anzeige!</div>':'')+'<div style="background:#0d1117;border:1px solid #1f6feb;border-radius:10px;padding:10px"><b>Plan ('+lab+') - '+coin+' - '+ent+' - Score '+score+'/100:</b><br>'+begr+'<br><br>🎯 Eintritt: '+lsE.toFixed(s)+' $<br>🛑 Stop: '+lsS.toFixed(s)+' $<br>✅ Ziel: '+lsT.toFixed(s)+' $<br><br>✅ Teilverkauf 1 bei '+fib['0.786'].toFixed(s)+' $ → 50% raus<br>✅ Teilverkauf 2 bei '+fib['0.618'].toFixed(s)+' $ → Rest raus'+elP+abP+'<br>🌍 BTC.D: '+btcD.toFixed(2)+'% | USDT.D: '+usdtD.toFixed(2)+'% | ALT.D: '+altD.toFixed(2)+'% → '+altS+'</div>';}
-buildCoins();$('coinInfo').innerHTML=INFO[coin];cd=1800;startCd();updateLabels();calc();load();dom();
-</script></body></html>
+ let myEntry=num($('myEntry').value);
+ let price=state.price||myEntry||2.6;
+ let isFallback=!state.price;
+ if(isFallback){state.price=price;state.rsi=50;state.macd=0;state.fib=calcFibo(price*1.15,price*0.85,true);state.high=price*1.15;state.low=price*0.85;}
+ let rsi=state.rsi,macd=state.macd,fib=state.fib;
+ let inGold=price>=Math.min(fib['0.382'],fib['0.618'])&&price<=Math.max(fib['0.382'],fib['0.618']);
+ let pB=0,pBa=0;
+ if(price>fib['0.382'])pB++;else pBa++;
+ if(price>fib['0.5'])pB++;else pBa++;
+ if(inGold&&rsi<45)pB++;if(inGold&&rsi>55)pBa++;
+ if(rsi<30)pB+=2;else if(rsi<40)pB++;else if(rsi>70)pBa+=2;else if(rsi>60)pBa++;
+ if(macd>0)pB++;else pBa++;
+ let sig=pB>=3&&pBa<=1?'BULLISCH':pBa>=3&&pB<=1?'BÄRISCH':'BODENBILDUNG';
+ LA[tf]={sig,rsi,price};
+ // Score
+ let sc=50,det=[];
+ if(sig==='BULLISCH'){sc+=15;det.push('Fibo BULLISCH +15');}if(sig==='BÄRISCH'){sc-=15;det.push('Fibo BÄRISCH -15');}
+ if(inGold&&rsi<45){sc+=10;det.push('Golden Zone +10');}if(inGold&&rsi>55){sc-=10;det.push('Golden Zone -10');}
+ if(rsi<30){sc+=12;det.push('RSI überverkauft +12');}else if(rsi<40){sc+=6;det.push('RSI tief +6');}else if(rsi>70){sc-=12;det.push('RSI überkauft -12');}else if(rsi>60){sc-=6;det.push('RSI hoch -6');}
+ if(macd>0){sc+=5;det.push('MACD +5');}else{sc-=5;det.push('MACD -5');}
+ if(state.btc.trend==='BULLISCH'){sc+=10;det.push('BTC +10');}if(state.btc.trend==='BÄRISCH'){sc-=10;det.push('BTC -10');}
+ if(state.div.includes('BULLISCHE')){sc+=12;det.push('Bull Div +12');}if(state.div.includes('BÄRISCHE')){sc-=12;det.push('Bär Div -12');}
+ if(state.vol.includes('ECHT')){sc+=8;det.push('Vol ECHT +8');}if(state.vol.includes('FAKE')){sc-=10;det.push('Vol FAKE -10');}if(state.vol.includes('PANIK')){sc-=8;det.push('Vol PANIK -8');}
+ if(state.elliott&&state.elliott.bonus){sc+=state.elliott.bonus;det.push('Elliott '+state.elliott.welle+' '+state.elliott.bonus);}
+ if(state.abc&&state.abc.welle.includes('B')){sc-=5;det.push('ABC in B -5');}
+ sc=Math.max(0,Math.min(100,sc));
+ // Signal
+ let ent='WARTEN',grund='',entry=price,stop=price*0.98,target=price*1.02;
+ let blocked=false;
+ if(state.btc.trend==='BÄRISCH'&&sig==='BULLISCH'){blocked=true;grund='BTC ist BÄRISCH - blockiert deinen Long.';}
+ else if(state.vol.includes('FAKE')){blocked=true;grund='Volumen ist FAKE - nicht traden.';}
+ else if(state.div.includes('BÄRISCHE')&&sig==='BULLISCH'){blocked=true;grund='Bärische Divergenz - blockiert.';}
+ else if(state.elliott&&state.elliott.welle.includes('WELLE 4')){blocked=true;grund='Elliott in Welle 4 - warte auf Welle 5 / ABC.';}
+ else if(state.elliott&&state.elliott.welle.includes('WELLE 2')){blocked=true;grund='Elliott in Welle 2 - warte.';}
+ else if(state.abc&&state.abc.welle.includes('WELLE B')){blocked=true;grund='ABC in Welle B - danach kommt C runter.';}
+ else if(sc>=65&&sig==='BULLISCH'){ent='LONG';grund='Score '+sc+' + BULLISCH. Rückenwind!';entry=price;stop=fib['1'];target=fib['0.786'];}
+ else if(sc<=35&&sig==='BÄRISCH'){ent='SHORT';grund='Score '+sc+' + BÄRISCH.';entry=price;stop=fib['0'];target=fib['1'];}
+ else if(sc>=80){ent='LONG';grund='Score '+sc+' extrem stark.';entry=price;stop=fib['1'];target=fib['0.618'];}
+ else if(sc<=20){ent='SHORT';grund='Score '+sc+' extrem schwach.';entry=price;stop=fib['0'];target=fib['1'];}
+ else{grund=sc>=45?'Score '+sc+' zu schwach für einen Trade.':sig==='BODENBILDUNG'?'Signal ist BODENBILDUNG - warten.':'Keine klare Kante.';}
+ let risk=Math.abs(entry-stop),chance=Math.abs(target-entry),rrv=risk>0?(chance/risk).toFixed(1):'0';
+ // UI
+ let box=$('signalBox');box.className='signal '+(ent==='LONG'?'long':ent==='SHORT'?'short':'wait');
+ $('signalText').textContent=ent==='LONG'?'🟢 LONG':ent==='SHORT'?'🔴 SHORT':'🟡 WARTEN';
+ $('signalReason').textContent=(blocked?'🚫 BLOCKIERT: ':'')+grund+(isFallback?' | ⚠️ FALLBACK - keine Live-Daten':'');
+ $('vEntry').textContent=entry.toFixed(dec(coin))+' $';
+ $('vStop').textContent=stop.toFixed(dec(coin))+' $';
+ $('vTarget').textContent=target.toFixed(dec(coin))+' $';
+ $('vRrv').textContent='Risiko '+(risk/price*100).toFixed(1)+'% • Chance '+(chance/price*100).toFixed(1)+'% • CRV 1 : '+rrv;
+ $('scoreBig').innerHTML=sc+' <span style="font-size:16px;color:#888">/ 100</span>';
+ $('scoreBig').style.color=sc>=65?'#00e676':sc>=45?'#ffca28':'#ff5252';
+ $('scoreBar').style.width=sc+'%';$('scoreBar').style.background=sc>=65?'#00e676':sc>=45?'#ffca28':'#ff5252';
+ $('scoreDet').innerHTML=det.join('<br>');
+ // Fibo Liste
+ let fh='';['0','0.236','0.382','0.5','0.618','0.786','1','-0.272','-0.618'].forEach(f=>{
+  let near=Math.abs(fib[f]-price)<Math.abs(state.high-state.low)*0.05;
+  fh+='<div class="frow '+(f==='0.382'||f==='0.618'?'gold':'')+'"><span>'+f+' Fib '+(f==='0.382'||f==='0.618'?'⭐ Golden':'')+'</span><span><b>'+fib[f].toFixed(dec(coin))+' $</b>'+(near?'<span class="here">DU BIST HIER</span>':'')+'</span></div>';
+ });
+ $('fibList').innerHTML=(isFallback?'<div style="background:#2a2200;padding:10px;border-radius:10px;text-align:center">⚠️ FALLBACK - Tippe JETZT LADEN</div>':'')+fh;
+ // Elliott + ABC
+ $('elliottBox').innerHTML=state.elliott?'<b>'+state.elliott.welle+'</b><br>W3-Ziel: <b>'+state.elliott.z3.toFixed(dec(coin))+' $</b> • W5-Ziel: <b>'+state.elliott.z5.toFixed(dec(coin))+' $</b><br>Score: '+state.elliott.score+'/100 | W2: '+(state.elliott.r2*100).toFixed(0)+'% • W3: '+(state.elliott.r3*100).toFixed(0)+'% von W1':'Kein gültiger Elliott-Impuls. Regeln passen gerade nicht - besser kein Signal als ein falsches.';
+ $('abcBox').innerHTML=state.abc?'<b>🔤 '+state.abc.welle+'</b><br>C 1.0: <b>'+state.abc.z1.toFixed(dec(coin))+' $</b> • C 1.618: <b>'+state.abc.z16.toFixed(dec(coin))+' $</b>':'Kein klares ABC.';
+ // Plan
+ $('planBox').innerHTML='<b>Plan • '+coin+' '+tfLabel(tf)+' • '+ent+' • Score '+sc+'/100</b><br>'+grund+'<br><br>🎯 Eintritt: '+entry.toFixed(dec(coin))+' $<br>🛑 Stop: '+stop.toFixed(dec(coin))+' $<br>✅ Ziel: '+target.toFixed(dec(coin))+' $<br><br>✅ Teilverkauf 1 bei '+fib['0.786'].toFixed(dec(coin))+' $ → 50% raus<br>✅ Teilverkauf 2 bei '+fib['0.618'].toFixed(dec(coin))+' $ → Rest raus'+(state.elliott?'<br>🌊 Elliott: '+state.elliott.welle+' | W3: '+state.elliott.z3.toFixed(dec(coin))+' $':'')+(state.abc?'<br>🔤 ABC C 1.0: '+state.abc.z1.toFixed(dec(coin))+' $':'');
+ // Checkliste
+ let all5=['15m','1h','1d','1w','1M'].every(t=>LA[t]);
+ let five=all5?('15M: '+LA['15m'].sig+' | 1H: '+LA['1h'].sig+' | 1D: '+LA['1d'].sig+' | 1W: '+LA['1w'].sig+' | 1M: '+LA['1M'].sig):'Tipp alle 5 Zeiten einmal an.';
+ $('checkBox').innerHTML='<b>'+(blocked?'🚫 NICHT TRADEN':'✅ '+ent)+'</b> | Score <b>'+sc+'/100</b><br>• Signal: '+sig+'<br>• 5-Zeiten: '+five+'<br>• BTC: '+state.btc.trend+' ('+state.btc.price.toFixed(0)+' $) | RSI '+state.btc.rsi.toFixed(1)+'<br>• BTC.D: '+state.dom.btc.toFixed(1)+'% | USDT.D: '+state.dom.usdt.toFixed(1)+'% | ALT.D: '+state.dom.alt.toFixed(1)+'%<br>• Volumen: '+state.vol+'<br>• Divergenz: '+state.div+'<br>• Elliott: '+(state.elliott?state.elliott.welle:'KEIN ELLIOTT')+'<br>• ABC: '+(state.abc?state.abc.welle:'KEIN ABC')+'<br>• Fibo: '+state.high.toFixed(dec(coin))+' / '+state.low.toFixed(dec(coin))+' $ | '+(inGold?'IN Golden Zone 🎯':'ausserhalb');
+ if(myEntry&&state.price){let pnl=(state.price-myEntry)/myEntry*100;$('myPnl').textContent='Dein Einstieg '+myEntry.toFixed(dec(coin))+' $ → Jetzt '+state.price.toFixed(dec(coin))+' $ = '+(pnl>=0?'+':'')+pnl.toFixed(2)+' %';}
+}
+async function scanAll(){
+ $('allBox').innerHTML='⏳ Scanne...';
+ let rows=[];
+ for(let c of COINS){
+  let r=await getKlines(c+'USDT','1d',86400);
+  if(!r.data.length){rows.push('<tr><td><b>'+c+'</b></td><td>-</td><td>Keine Daten</td></tr>');continue;}
+  let closes=r.data.map(x=>x.close);let rr=rsiCalc(closes,14);
+  let sw=findSwing(r.data);let fib=calcFibo(sw.high,sw.low,sw.up);
+  let sig=closes[closes.length-1]>fib['0.382']?'BULLISCH':'BÄRISCH';
+  rows.push('<tr><td><b>'+c+'</b></td><td>'+closes[closes.length-1].toFixed(dec(c))+' $</td><td>RSI '+rr.toFixed(1)+' • '+sig+'</td></tr>');
+  await new Promise(x=>setTimeout(x,120));
+ }
+ $('allBox').innerHTML='<table><tr><th>Coin</th><th>Preis</th><th>RSI / Signal</th></tr>'+rows.join('')+'</table>';
+}
+function startClock(){
+ if(timer)clearInterval(timer);
+ timer=setInterval(()=>{countdown--;if(countdown<=0){countdown={'15m':60,'1h':300,'1d':1800,'1w':3600,'1M':86400}[tf];load();}
+ let m=Math.floor(countdown/60),s=countdown%60,hh=Math.floor(countdown/3600);
+ $('cd').textContent=countdown>=3600?hh+':'+String(Math.floor((countdown%3600)/60)).padStart(2,'0')+':'+String(s).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ },1000);
+}
+buildPills();syncHeads();startClock();calc();load();
+</script>
+</body>
+</html>
