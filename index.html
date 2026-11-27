@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOEL TRADER - V6 BOS + FVG + OB</title>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#08090c;color:#e6e6e6;font-family:system-ui;padding:12px;padding-bottom:40px}
+header{text-align:center;padding:14px 0 6px}
+header h1{font-size:26px;letter-spacing:1px}
+header h1 span{color:#00e676}
+header p{color:#888;font-size:12px;margin-top:4px}
+.card{background:#12141a;border:1px solid #222;border-radius:16px;padding:14px;margin-top:12px}
+.card h2{font-size:14px;margin-bottom:10px;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:10px 14px;border-radius:999px;background:#1e212b;border:1px solid #333;color:#fff;font-weight:700;cursor:pointer}
+.pill.active{background:#00e676;color:#000;border-color:#00e676}
+.pill.tf.active{background:#2962ff;color:#fff;border-color:#2962ff}
+.pill.tf.year.active{background:#a855f7;color:#fff;border-color:#a855f7}
+.top{display:flex;gap:12px}
+.bigbox{flex:1;background:#0b0d12;border:1px solid #222;border-radius:14px;padding:14px;text-align:center}
+.bigbox small{color:#888;font-size:11px}
+.bigbox .val{font-size:32px;font-weight:900;margin-top:4px}
+.badge{display:inline-block;padding:5px 12px;border-radius:999px;font-weight:800;font-size:12px;margin-top:6px}
+.g{background:#00e676;color:#000}.y{background:#ffca28;color:#000}.r{background:#ff5252;color:#fff}
+.bar{height:10px;background:#222;border-radius:99px;overflow:hidden;margin-top:10px}
+.signal{border-radius:16px;padding:18px;text-align:center;margin-top:12px;border:3px solid #333}
+.signal.long{background:#052e16;border-color:#00e676}
+.signal.short{background:#3b0a0a;border-color:#ff5252}
+.signal.wait{background:#2a2200;border-color:#ffca28}
+.signal .t{font-size:38px;font-weight:900}
+.signal .s{font-size:13px;color:#aaa;margin-top:4px}
+.grid3{display:flex;gap:8px;margin-top:12px}
+.grid3 div{flex:1;background:#0b0d12;border-radius:12px;padding:10px;text-align:center}
+.grid3 small{color:#888;font-size:11px;display:block}
+.grid3 b{font-size:15px}
+#chart{height:380px;border-radius:12px;overflow:hidden;background:#0b0d12}
+.frow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e212b;font-size:14px}
+.frow.gold{background:#ff6d0015;border-radius:8px;padding:9px 6px}
+.here{background:#ffca28;color:#000;font-size:10px;padding:2px 6px;border-radius:99px;margin-left:6px}
+button.main{width:100%;padding:15px;border:none;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px}
+.blue{background:#2962ff;color:#fff}.green{background:#00e676;color:#000}
+input{width:100%;background:#0b0d12;border:1px solid #333;color:#fff;padding:12px;border-radius:10px;margin-top:4px;font-size:16px}
+label{font-size:12px;color:#888}
+.list{font-size:14px;line-height:1.7}
+.debug{background:#000;border:1px solid #ff5252;border-radius:10px;padding:10px;font-size:12px;white-space:pre-wrap;max-height:200px;overflow:auto;color:#ffca28}
+.small{font-size:12px;color:#888;text-align:center;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:7px 4px;border-bottom:1px solid #222;text-align:left}
+.rank{color:#00e676;font-weight:800}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;font-size:12px}
+.legend span{padding:4px 8px;border-radius:99px;background:#1e212b}
+.new{color:#00e676;font-weight:800}
+.bosbox{background:#052e16;border:1px solid #00e676;border-radius:10px;padding:10px}
+.chochbox{background:#3b0a0a;border:1px solid #ff5252;border-radius:10px;padding:10px}
+.fvgbox{background:#0b1e3a;border:1px solid #3b82f6;border-radius:10px;padding:10px}
+.obbox{background:#2a0a3b;border:1px solid #a855f7;border-radius:10px;padding:10px}
+</style>
+</head>
+<body>
+
+<header><h1>NOEL <span>TRADER</span></h1><p>V6 • BOS / CHoCH + FVG + Order Blocks • Kein ABC mehr</p></header>
+
+<div class="card"><h2>🪙 Top 25</h2>
+<div class="pills">
+<button class="pill active" data-coin="BTC" onclick="pickCoin('BTC')"><span class="rank">#1</span> BTC</button>
+<button class="pill" data-coin="ETH" onclick="pickCoin('ETH')"><span class="rank">#2</span> ETH</button>
+<button class="pill" data-coin="BNB" onclick="pickCoin('BNB')"><span class="rank">#4</span> BNB</button>
+<button class="pill" data-coin="XRP" onclick="pickCoin('XRP')"><span class="rank">#6</span> XRP</button>
+<button class="pill" data-coin="SOL" onclick="pickCoin('SOL')"><span class="rank">#7</span> SOL</button>
+<button class="pill" data-coin="TRX" onclick="pickCoin('TRX')"><span class="rank">#8</span> TRX</button>
+<button class="pill" data-coin="HYPE" onclick="pickCoin('HYPE')"><span class="rank">#9</span> HYPE</button>
+<button class="pill" data-coin="DOGE" onclick="pickCoin('DOGE')"><span class="rank">#10</span> DOGE</button>
+<button class="pill" data-coin="LEO" onclick="pickCoin('LEO')"><span class="rank">#11</span> LEO</button>
+<button class="pill" data-coin="ZEC" onclick="pickCoin('ZEC')"><span class="rank">#12</span> ZEC</button>
+<button class="pill" data-coin="XLM" onclick="pickCoin('XLM')"><span class="rank">#13</span> XLM</button>
+<button class="pill" data-coin="ADA" onclick="pickCoin('ADA')"><span class="rank">#14</span> ADA</button>
+<button class="pill" data-coin="XMR" onclick="pickCoin('XMR')"><span class="rank">#15</span> XMR</button>
+<button class="pill" data-coin="LINK" onclick="pickCoin('LINK')"><span class="rank">#16</span> LINK</button>
+<button class="pill" data-coin="BCH" onclick="pickCoin('BCH')"><span class="rank">#19</span> BCH</button>
+<button class="pill" data-coin="TON" onclick="pickCoin('TON')"><span class="rank">#22</span> TON</button>
+<button class="pill" data-coin="LTC" onclick="pickCoin('LTC')"><span class="rank">#23</span> LTC</button>
+<button class="pill" data-coin="HBAR" onclick="pickCoin('HBAR')"><span class="rank">#25</span> HBAR</button>
+<button class="pill" data-coin="SUI" onclick="pickCoin('SUI')"><span class="rank">#26</span> SUI</button>
+<button class="pill" data-coin="AVAX" onclick="pickCoin('AVAX')"><span class="rank">#28</span> AVAX</button>
+<button class="pill" data-coin="CRO" onclick="pickCoin('CRO')"><span class="rank">#29</span> CRO</button>
+<button class="pill" data-coin="SHIB" onclick="pickCoin('SHIB')"><span class="rank">#30</span> SHIB</button>
+<button class="pill" data-coin="NEAR" onclick="pickCoin('NEAR')"><span class="rank">#32</span> NEAR</button>
+<button class="pill" data-coin="TAO" onclick="pickCoin('TAO')"><span class="rank">#34</span> TAO</button>
+<button class="pill" data-coin="UNI" onclick="pickCoin('UNI')"><span class="rank">#35</span> UNI</button>
+</div>
+<h2 style="margin-top:14px">⏰ Zeit</h2>
+<div class="pills">
+<button class="pill tf" data-tf="15m" onclick="pickTf('15m')">15 MIN</button>
+<button class="pill tf" data-tf="1h" onclick="pickTf('1h')">1 STD</button>
+<button class="pill tf active" data-tf="1d" onclick="pickTf('1d')">1 TAG</button>
+<button class="pill tf" data-tf="1w" onclick="pickTf('1w')">1 WOCHE</button>
+<button class="pill tf" data-tf="1M" onclick="pickTf('1M')">1 MONAT</button>
+<button class="pill tf year" data-tf="1y" onclick="pickTf('1y')">1 JAHR ⭐</button>
+</div>
+<div class="small"><span id="statusLine">Bereit</span> • Update in <b id="cd">30:00</b> • <span id="tfInfo">1D = Tages-Kerzen</span> • <span id="candleInfo">-- Kerzen</span></div>
+<button class="main blue" onclick="load()">🔄 JETZT LADEN</button></div>
+
+<div class="signal wait" id="signalBox">
+<div style="font-size:12px;color:#aaa" id="signalHead">BTC • 1D</div>
+<div class="t" id="signalText">⏳ LADEN</div>
+<div class="s" id="signalReason">Lade...</div>
+<div class="grid3"><div><small>🎯 EINTRITT</small><b id="vEntry">--</b></div><div><small>🛑 STOP (ATR)</small><b id="vStop">--</b></div><div><small>✅ ZIEL</small><b id="vTarget">--</b></div></div>
+<div class="small" id="vRrv">--</div><div class="small" id="vAtr">--</div>
+</div>
+
+<div class="top">
+<div class="bigbox"><small>PREIS</small><div class="val" id="priceBig">--</div><div class="small" id="priceSrc">--</div><div class="small" id="vwapLine">--</div></div>
+<div class="bigbox"><small>RSI (14) • <span id="rsiHead">1D - BTC</span></small><div class="val" id="rsiBig">--</div><span class="badge y" id="rsiBadge">--</span><div class="bar"><div id="rsiBar" style="width:50%;background:#ffca28"></div></div></div>
+</div>
+
+<div class="card"><h2>🧠 Score - mit BOS / CHoCH + FVG + OB</h2><div style="text-align:center;font-size:40px;font-weight:900" id="scoreBig">-- <span style="font-size:16px;color:#888">/ 100</span></div><div class="bar"><div id="scoreBar" style="width:50%;background:#ffca28"></div></div><div class="list" id="scoreDet" style="margin-top:10px"></div></div>
+
+<div class="card"><h2>📐 Chart + Fibo + S/R + VWAP + BOS + FVG + OB</h2><div id="chart"></div>
+<div class="legend"><span style="color:#ff6d00">— Fibo 0.382 / 0.618</span><span style="color:#00e676">— Support / BOS</span><span style="color:#ff5252">— Resistance / CHoCH</span><span style="color:#e879f9">— VWAP</span><span style="color:#3b82f6">— FVG</span><span style="color:#a855f7">— Order Block</span></div>
+<div class="small" id="fibInfo">--</div><div class="small" id="srInfo" style="color:#00e676;font-weight:700">--</div><div class="small" id="bosInfo" style="color:#fff;font-weight:700">--</div></div>
+
+<div class="card"><h2><span class="new">NEU 1</span> Marktstruktur - BOS / CHoCH</h2><div class="list" id="structureBox">Lade...</div></div>
+
+<div class="card"><h2><span class="new">NEU 2</span> Fair Value Gaps + Order Blocks</h2><div class="list" id="fvgObBox">Lade...</div></div>
+
+<div class="card"><h2>📊 Fibonacci FULL</h2><div id="fibList">Lade...</div></div>
+
+<div class="card"><h2>VWAP + ATR + S/R + Sweep</h2><div class="list" id="newBox">Lade...</div></div>
+
+<div class="card"><h2>Multi-Timeframe Check</h2><div class="list" id="mtfBox">Tipp einmal alle Zeiten durch.</div></div>
+
+<div class="card"><h2>🌊 Elliott</h2><div class="list" id="elliottBox">Lade...</div></div>
+
+<div class="card"><h2>🎯 Trading-Plan</h2><div class="list" id="planBox">Lade...</div></div>
+<div class="card"><h2>✅ Checkliste</h2><div class="list" id="checkBox">Noch keine Analyse.</div></div>
+<div class="card"><h2>🔍 Top 25 scannen</h2><button class="main green" onclick="scanAll()">🔍 ALLE 25 SCANNEN</button><div id="allBox" class="small" style="text-align:left;margin-top:10px">Noch nicht gescannt.</div></div>
+<div class="card"><h2>📝 Dein Einstieg</h2><label>Einstiegspreis (Komma geht: 2,6)</label><input id="myEntry" value=""><button class="main blue" onclick="calc()">📊 ANALYSE BERECHNEN</button><div class="small" id="myPnl"></div></div>
+<div class="card"><h2>🔧 Debug</h2><div class="debug" id="dbg">Starte...</div><button class="main" style="background:#ffca28;color:#000" onclick="testSources()">🔧 QUELLEN TESTEN</button></div>
+
+<script>
+var dbgEl = document.getElementById('dbg');
+function showErr(msg){ if(dbgEl){ dbgEl.textContent = dbgEl.textContent + '\nFEHLER: ' + msg; } }
+window.onerror = function(m, src, line){ showErr(m + ' Zeile ' + line); return false; };
+var $=function(id){return document.getElementById(id);};
+var COINS=[
+ {s:'BTC',n:'Bitcoin',rank:1,grp:'A'},{s:'ETH',n:'Ethereum',rank:2,grp:'A'},{s:'BNB',n:'BNB',rank:4,grp:'A'},{s:'XRP',n:'XRP',rank:6,grp:'A/B'},{s:'SOL',n:'Solana',rank:7,grp:'A/B'},{s:'TRX',n:'TRON',rank:8,grp:'A'},{s:'HYPE',n:'Hyperliquid',rank:9,grp:'B'},{s:'DOGE',n:'Dogecoin',rank:10,grp:'E'},{s:'LEO',n:'UNUS SED LEO',rank:11,grp:'A/B'},{s:'ZEC',n:'Zcash',rank:12,grp:'A/B'},{s:'XLM',n:'Stellar',rank:13,grp:'A'},{s:'ADA',n:'Cardano',rank:14,grp:'A/B'},{s:'XMR',n:'Monero',rank:15,grp:'A'},{s:'LINK',n:'Chainlink',rank:16,grp:'A'},{s:'BCH',n:'Bitcoin Cash',rank:19,grp:'A/B'},{s:'TON',n:'Toncoin',rank:22,grp:'A/B'},{s:'LTC',n:'Litecoin',rank:23,grp:'A'},{s:'HBAR',n:'Hedera',rank:25,grp:'A/B'},{s:'SUI',n:'Sui',rank:26,grp:'B'},{s:'AVAX',n:'Avalanche',rank:28,grp:'A/B'},{s:'CRO',n:'Cronos',rank:29,grp:'A/B'},{s:'SHIB',n:'Shiba Inu',rank:30,grp:'E'},{s:'NEAR',n:'NEAR Protocol',rank:32,grp:'A/B'},{s:'TAO',n:'Bittensor',rank:34,grp:'B'},{s:'UNI',n:'Uniswap',rank:35,grp:'A'}
+];
+var coin='BTC', tf='1d';
+var state={price:0,rsi:50,macd:0,high:0,low:0,fib:null,elliott:null,atr:0,vwap:0,sr:null,sweep:'KEIN',structure:null,fvgs:[],obs:[],btc:{price:0,rsi:50,trend:'NEUTRAL'},vol:'NEUTRAL',volRatio:1,div:'KEINE',dom:{btc:0,usdt:0,alt:0},candles:[]};
+var LA={};
+var chart=null, series=null, vwapSeries=null, priceLines=[];
+var countdown=1800, timer=null;
+var dbgLines=[];
+var TF_CONFIG={
+ '15m':{label:'15M',binance:'15m',gran:900,cd:60,info:'15M = 15-Minuten-Kerzen',pct:0.015,limit:500,srLook:150,vwapLook:100,range:'500 Kerzen = ~5 Tage'},
+ '1h':{label:'1H',binance:'1h',gran:3600,cd:300,info:'1H = Stunden-Kerzen',pct:0.025,limit:500,srLook:200,vwapLook:150,range:'500 Kerzen = ~20 Tage'},
+ '1d':{label:'1D',binance:'1d',gran:86400,cd:1800,info:'1D = Tages-Kerzen',pct:0.05,limit:1000,srLook:300,vwapLook:200,range:'1000 Kerzen = ~2,7 Jahre'},
+ '1w':{label:'1W',binance:'1w',gran:604800,cd:3600,info:'1W = Wochen-Kerzen',pct:0.08,limit:500,srLook:300,vwapLook:200,range:'500 Kerzen = ~9,6 Jahre'},
+ '1M':{label:'1M',binance:'1M',gran:2592000,cd:86400,info:'1M = Monats-Kerzen',pct:0.12,limit:300,srLook:200,vwapLook:150,range:'300 Kerzen = 25 Jahre'},
+ '1y':{label:'1Y',binance:'1w',gran:604800,cd:86400,info:'1Y = Wochen-Kerzen, letzte 52 Wochen = 1 Jahr',pct:0.15,limit:500,srLook:200,vwapLook:150,range:'52 Kerzen = 1 Jahr'}
+};
+function num(v){if(v==null)return 0;var s=String(v).trim().replace(/\s/g,'');if(s.indexOf(',')>=0&&s.indexOf('.')>=0)s=s.replace(/\./g,'').replace(',','.');else if(s.indexOf(',')>=0)s=s.replace(',','.');var n=parseFloat(s);return isNaN(n)?0:n;}
+function dec(c){if(c==='XLM')return 4;if(c==='SHIB')return 8;if(c==='DOGE')return 4;if(c==='XRP')return 4;if(c==='ADA')return 4;if(c==='TRX')return 4;if(c==='ZEC')return 2;if(c==='BTC')return 0;if(c==='ETH')return 0;if(c==='BCH')return 2;if(c==='HBAR')return 4;if(c==='CRO')return 4;if(c==='SUI')return 3;if(c==='NEAR')return 3;if(c==='TAO')return 1;if(c==='UNI')return 3;if(c==='LINK')return 3;if(c==='AVAX')return 2;if(c==='SOL')return 2;if(c==='BNB')return 2;if(c==='TON')return 3;if(c==='LTC')return 2;if(c==='HYPE')return 2;if(c==='LEO')return 2;if(c==='XMR')return 2;return 3;}
+function tfLabel(t){return TF_CONFIG[t]?TF_CONFIG[t].label:t;}
+function coinInfo(c){for(var i=0;i<COINS.length;i++){if(COINS[i].s===c)return COINS[i];}return {n:c,rank:'-',grp:'-'};}
+function log(m){dbgLines.push(m);if(dbgLines.length>40)dbgLines.shift();$('dbg').textContent=dbgLines.join('\n');}
+function fmt(n){return n.toFixed(dec(coin))+' $';}
+function rsiCalc(c,p){var g=0,l=0;for(var i=1;i<=p;i++){var d=c[i]-c[i-1];if(d>=0)g+=d;else l+=-d;}var ag=g/p,al=l/p;for(var i=p+1;i<c.length;i++){var d=c[i]-c[i-1];ag=(ag*(p-1)+(d>0?d:0))/p;al=(al*(p-1)+(d<0?-d:0))/p;}if(al===0)return 100;if(ag===0)return 0;return 100-(100/(1+ag/al));}
+function ema(d,p){var k=2/(p+1),e=0;for(var i=0;i<p;i++)e+=d[i];e/=p;for(var i=p;i<d.length;i++)e=d[i]*k+e*(1-k);return e;}
+function markActive(){
+ var a=document.querySelectorAll('[data-coin]');for(var i=0;i<a.length;i++){if(a[i].dataset.coin===coin)a[i].classList.add('active');else a[i].classList.remove('active');}
+ var b=document.querySelectorAll('[data-tf]');for(var j=0;j<b.length;j++){if(b[j].dataset.tf===tf)b[j].classList.add('active');else b[j].classList.remove('active');}
+}
+function pickCoin(c){ try{ log('Klick Coin: '+c); coin=c;markActive();syncHeads();load(); }catch(e){ log('FEHLER pickCoin: '+e.message); } }
+function pickTf(t){ try{ log('Klick TF: '+t); tf=t;countdown=TF_CONFIG[t].cd;markActive();syncHeads();load(); }catch(e){ log('FEHLER pickTf: '+e.message); } }
+function syncHeads(){
+ var inf=coinInfo(coin);
+ $('rsiHead').textContent=tfLabel(tf)+' - '+coin+' (#'+inf.rank+' • '+inf.n+')';
+ $('signalHead').textContent=coin+' • '+tfLabel(tf)+' • #'+inf.rank+' '+inf.n+' • Gruppe '+inf.grp;
+ $('statusLine').textContent='Lade '+coin+' '+tfLabel(tf)+'...';
+ $('tfInfo').textContent=TF_CONFIG[tf].info;
+ $('candleInfo').textContent=TF_CONFIG[tf].range;
+}
+async function fetchJson(url){
+ try{
+  var c=new AbortController();var tm=setTimeout(function(){c.abort();},8000);
+  var r=await fetch(url,{signal:c.signal});clearTimeout(tm);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return await r.json();
+ }catch(e){log('FEHLER '+url.slice(0,50)+' -> '+e.message);return null;}
+}
+async function getKlines(sym, interval, gran, limit){
+ limit=limit||500;
+ var d=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+sym+'&interval='+interval+'&limit='+limit);
+ if(Array.isArray(d)&&d.length>=30){
+  var out=[];
+  for(var i=0;i<d.length;i++){var k=d[i];out.push({time:Math.floor(k[0]/1000),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),vol:Number(k[5])});}
+  return {src:'Binance',data:out};
+ }
+ var base=sym.replace('USDT','');
+ var cb=await fetchJson('https://api.exchange.coinbase.com/products/'+base+'-USD/candles?granularity='+gran);
+ if(Array.isArray(cb)&&cb.length>=30){
+  var rev=cb.slice().reverse();var out2=[];
+  for(var j=0;j<rev.length;j++){var q=rev[j];out2.push({time:q[0],open:q[3],high:q[2],low:q[1],close:q[4],vol:q[5]});}
+  return {src:'Coinbase',data:out2};
+ }
+ var krakenMap={BTC:'XBTUSD',ETH:'ETHUSD',XRP:'XRPUSD',SOL:'SOLUSD',DOGE:'DOGEUSD',ADA:'ADAUSD',LINK:'LINKUSD',BCH:'BCHUSD',LTC:'LTCUSD',AVAX:'AVAXUSD',NEAR:'NEARUSD',UNI:'UNIUSD',XMR:'XMRUSD',ZEC:'ZECUSD',XLM:'XLMUSD',HBAR:'HBARUSD',SUI:'SUIUSD',TAO:'TAOUSD',TRX:'TRXUSD',BNB:'BNBUSD',TON:'TONUSD',CRO:'CROUSD',SHIB:'SHIBUSD',HYPE:'HYPEUSD',LEO:'LEOUSD'};
+ var kp=krakenMap[base]||base+'USD';
+ var krInterval=gran<=900?15:gran<=3600?60:gran<=86400?1440:10080;
+ var kr=await fetchJson('https://api.kraken.com/0/public/OHLC?pair='+kp+'&interval='+krInterval);
+ try{
+  if(kr&&kr.result){var keys=Object.keys(kr.result);var key=null;for(var k2=0;k2<keys.length;k2++){if(keys[k2]!=='last'){key=keys[k2];break;}}var arr=kr.result[key];if(Array.isArray(arr)&&arr.length>=30){var out3=[];for(var m=0;m<arr.length;m++){var kk=arr[m];out3.push({time:Number(kk[0]),open:Number(kk[1]),high:Number(kk[2]),low:Number(kk[3]),close:Number(kk[4]),vol:Number(kk[6])});}return {src:'Kraken',data:out3};}}
+ }catch(e){}
+ return {src:'-',data:[]};
+}
+async function testSources(){
+ try{
+  dbgLines=[];log('Teste '+coin+'...');
+  var b=await fetchJson('https://api.binance.com/api/v3/klines?symbol='+coin+'USDT&interval=1d&limit=5');
+  log(b?'OK Binance ('+b.length+')':'FEHLER Binance');
+  var cb=await fetchJson('https://api.exchange.coinbase.com/products/'+coin+'-USD/candles?granularity=86400');
+  log(cb?'OK Coinbase':'FEHLER Coinbase');
+ }catch(e){ log('FEHLER testSources: '+e.message); }
+}
+function calcFibo(high,low,up){
+ var d=high-low;var L={};
+ if(up){L={'0':high,'0.236':high-d*0.236,'0.382':high-d*0.382,'0.5':high-d*0.5,'0.618':high-d*0.618,'0.786':high-d*0.786,'1':low,'-0.272':high+d*0.272,'-0.618':high+d*0.618};}
+ else{L={'0':low,'0.236':low+d*0.236,'0.382':low+d*0.382,'0.5':low+d*0.5,'0.618':low+d*0.618,'0.786':low+d*0.786,'1':high,'-0.272':low-d*0.272,'-0.618':low-d*0.618};}
+ return L;
+}
+function findSwingSmart(candles){
+ var look=Math.min(300, candles.length);
+ var slice=candles.slice(-look);
+ var hi=-1e18,lo=1e18,ih=0,il=0;
+ for(var i=0;i<slice.length;i++){var x=slice[i];if(x.high>hi){hi=x.high;ih=i;}if(x.low<lo){lo=x.low;il=i;}}
+ return {high:hi,low:lo,up:ih>il,look:look};
+}
+function zigzag(c,pct){
+ var z=[],lh=c[0].high,ll=c[0].low,lhi=0,lli=0,dir=0;
+ for(var i=1;i<c.length;i++){var x=c[i];
+  if(dir>=0){if(x.high>lh){lh=x.high;lhi=i;}if(x.low<lh*(1-pct)){z.push({i:lhi,p:lh,t:'H',time:c[lhi].time});dir=-1;ll=x.low;lli=i;}}
+  else{if(x.low<ll){ll=x.low;lli=i;}if(x.high>ll*(1+pct)){z.push({i:lli,p:ll,t:'T',time:c[lli].time});dir=1;lh=x.high;lhi=i;}}
+ }
+ z.push(dir>=0?{i:lhi,p:lh,t:'H',time:c[lhi].time}:{i:lli,p:ll,t:'T',time:c[lli].time});return z;
+}
+function detectElliott(candles){
+ try{
+ if(candles.length<80)return null;
+ var pct=TF_CONFIG[tf].pct;
+ var z=zigzag(candles,pct);if(z.length<6)return null;
+ var price=candles[candles.length-1].close,last=candles.length-1,best=null,bs=-999;
+ for(var s=Math.max(0,z.length-20);s<=z.length-6;s++){
+  var p=z.slice(s,s+6);
+  var up=p[0].t==='T'&&p[1].t==='H'&&p[2].t==='T'&&p[3].t==='H'&&p[4].t==='T'&&p[5].t==='H';
+  var dn=p[0].t==='H'&&p[1].t==='T'&&p[2].t==='H'&&p[3].t==='T'&&p[4].t==='H'&&p[5].t==='T';
+  if(!up&&!dn)continue;if(last-p[5].i>60)continue;
+  var w1=Math.abs(p[1].p-p[0].p),w2=Math.abs(p[1].p-p[2].p),w3=Math.abs(p[3].p-p[2].p),w4=Math.abs(p[3].p-p[4].p),w5=Math.abs(p[5].p-p[4].p);
+  if(w1<=0||w3<=0||w5<=0)continue;
+  var r2=w2/w1,r3=w3/w1,r4=w4/w3,r5=w5/w1;
+  var ok2=r2<1&&r2>0.15, ok3=!(w3<w1&&w3<w5), ok4=up?(p[4].p>p[1].p):(p[4].p<p[1].p);
+  if(!(ok2&&ok3&&ok4))continue;
+  var sc=60;if(r2>=0.382&&r2<=0.786)sc+=10;if(r3>=1.3&&r3<=2)sc+=10;if(r4>=0.236&&r4<=0.5)sc+=10;if(r5>=0.618&&r5<=1.618)sc+=10;
+  if(sc<=bs)continue;bs=sc;
+  var k4=last-p[4].i,k3=last-p[3].i,welle='',bonus=0,z3=0,z5=0;
+  if(up){z3=p[2].p+w1*1.618;z5=p[4].p+w1*1.618;
+   if(price>p[2].p&&price<=p[3].p&&k3<=5){welle='WELLE 3 LAEUFT';bonus=15;}
+   else if(price<p[3].p&&price>p[4].p*0.98){welle='WELLE 4 LAEUFT';bonus=-8;}
+   else if(price>p[4].p&&price<p[5].p&&k4<=10){welle='WELLE 5 LAEUFT';bonus=-10;}
+   else{welle='WELLE 5 ABGESCHLOSSEN';bonus=-5;}
+  }else{z3=p[2].p-w1*1.618;z5=p[4].p-w1*1.618;
+   if(price<p[2].p&&price>=p[3].p&&k3<=5){welle='WELLE 3 LAEUFT ABWAERTS';bonus=15;}
+   else if(price>p[3].p&&price<p[4].p*1.02){welle='WELLE 4 LAEUFT';bonus=-8;}
+   else if(price<p[4].p&&price>p[5].p&&k4<=10){welle='WELLE 5 LAEUFT';bonus=-10;}
+   else{welle='WELLE 5 ABGESCHLOSSEN';bonus=-5;}
+  }
+  best={dir:up?'AUF':'AB',welle:welle,bonus:bonus,z3:z3,z5:z5,p:p,score:sc,r2:r2,r3:r3,r4:r4,r5:r5};
+ }
+ return best;
+ }catch(e){ log('FEHLER Elliott: '+e.message); return null; }
+}
+function calcATR(candles, p){
+ p=p||14;
+ var trs=[];
+ for(var i=1;i<candles.length;i++){
+  var h=candles[i].high, l=candles[i].low, pc=candles[i-1].close;
+  trs.push(Math.max(h-l, Math.abs(h-pc), Math.abs(l-pc)));
+ }
+ if(trs.length<p) return 0;
+ var atr=0; for(var j=0;j<p;j++) atr+=trs[j]; atr/=p;
+ for(var k=p;k<trs.length;k++) atr=(atr*(p-1)+trs[k])/p;
+ return atr;
+}
+function calcVWAP(candles, look){
+ look=look||200;
+ var n=Math.min(look, candles.length);
+ var sumPV=0, sumV=0;
+ var series=[];
+ for(var i=candles.length-n;i<candles.length;i++){
+  var c=candles[i];
+  var tp=(c.high+c.low+c.close)/3;
+  var v=c.vol||1;
+  sumPV+=tp*v; sumV+=v;
+  series.push({time:c.time, value: sumV>0? sumPV/sumV : tp});
+ }
+ return {value: sumV>0? sumPV/sumV: candles[candles.length-1].close, series: series, look:n};
+}
+function calcSR(candles, look){
+ look=look||300;
+ var slice=candles.slice(-look);
+ var price=candles[candles.length-1].close;
+ var levels=[];
+ for(var i=0;i<slice.length;i++){ levels.push(slice[i].high); levels.push(slice[i].low); }
+ var clusters=[];
+ for(var j=0;j<levels.length;j++){
+  var lvl=levels[j]; var found=null;
+  for(var k=0;k<clusters.length;k++){ if(Math.abs(clusters[k].price-lvl)/lvl<0.008){ found=clusters[k]; break; } }
+  if(found){ found.count++; found.price=(found.price*(found.count-1)+lvl)/found.count; }
+  else clusters.push({price:lvl, count:1});
+ }
+ clusters.sort(function(a,b){return b.count-a.count;});
+ var supports=[], resistances=[];
+ for(var m=0;m<clusters.length;m++){
+  var c2=clusters[m];
+  if(c2.count<3) continue;
+  if(c2.price<price) supports.push(c2);
+  else if(c2.price>price) resistances.push(c2);
+ }
+ supports.sort(function(a,b){return b.price-a.price;});
+ resistances.sort(function(a,b){return a.price-b.price;});
+ return {support: supports.slice(0,3), resistance: resistances.slice(0,3), nearestSupport: supports[0]||null, nearestResistance: resistances[0]||null, totalLevels: clusters.length, look:look};
+}
+function detectSweep(candles){
+ if(candles.length<20) return 'KEIN';
+ var last=candles[candles.length-1];
+ var prevHigh=Math.max.apply(null, candles.slice(-20,-1).map(function(x){return x.high;}));
+ var prevLow=Math.min.apply(null, candles.slice(-20,-1).map(function(x){return x.low;}));
+ if(last.high>prevHigh && last.close<prevHigh) return 'BEARISH SWEEP - Hoch abgeholt, dann runter = Fake-Ausbruch nach oben';
+ if(last.low<prevLow && last.close>prevLow) return 'BULLISH SWEEP - Tief abgeholt, dann hoch = Fake-Ausbruch nach unten';
+ if(last.high>prevHigh && last.close>prevHigh) return 'ECHTER AUSBRUCH NACH OBEN';
+ if(last.low<prevLow && last.close<prevLow) return 'ECHTER AUSBRUCH NACH UNTEN';
+ return 'KEIN SWEEP';
+}
+// ===== NEU 1: BOS / CHoCH =====
+// Logik: Nimm die letzten 3 Swing-Hochs und Swing-Tiefs (ZigZag)
+// Trend = Uptrend wenn letztes Hoch > vorletztes Hoch UND letztes Tief > vorletztes Tief
+// BOS = Preis bricht letztes Swing-Hoch im Uptrend (Trend bestätigt)
+// CHoCH = Preis bricht letztes Swing-Tief im Uptrend (Trend gebrochen!)
+function detectStructure(candles){
+ try{
+ if(candles.length<50) return null;
+ var pct=TF_CONFIG[tf].pct;
+ var z=zigzag(candles, pct);
+ if(z.length<4) return null;
+ var price=candles[candles.length-1].close;
+ var last=candles.length-1;
+ // Letzte 4 Swings: z.B. Hoch - Tief - Hoch - Tief oder umgekehrt
+ var recent=z.slice(-5);
+ // Finde letztes Hoch und letztes Tief + die davor
+ var highs=[], lows=[];
+ for(var i=0;i<z.length;i++){ if(z[i].t==='H') highs.push(z[i]); else lows.push(z[i]); }
+ if(highs.length<2||lows.length<2) return null;
+ var lastH=highs[highs.length-1], prevH=highs[highs.length-2];
+ var lastL=lows[lows.length-1], prevL=lows[lows.length-2];
+ // Trend bestimmen
+ var upTrend = lastH.p>prevH.p && lastL.p>prevL.p;
+ var downTrend = lastH.p<prevH.p && lastL.p<prevL.p;
+ var trend = upTrend?'UPTREND':downTrend?'DOWNTREND':'SEITWÄRTS';
+ var event='KEIN BRUCH', eventType='NONE', eventLevel=0, eventBonus=0, blockLong=false, blockShort=false, desc='';
+ // Prüfe letzte 5 Kerzen: Hat der Preis ein altes Swing-Level gebrochen?
+ // Wir schauen, ob der Close der letzten Kerzen über/unter dem vorletzten Swing liegt
+ var recentCloses=candles.slice(-5).map(function(c){return c.close;});
+ var maxRecent=Math.max.apply(null, recentCloses);
+ var minRecent=Math.min.apply(null, recentCloses);
+ if(trend==='UPTREND'||trend==='SEITWÄRTS'){
+  // Im Uptrend: Bruch über letztes Hoch = BOS Bullish
+  if(maxRecent>lastH.p && price>prevH.p){
+   event='BOS BULLISH ✅'; eventType='BOS_UP'; eventLevel=lastH.p; eventBonus=12;
+   desc='Preis hat letztes Hoch '+lastH.p.toFixed(dec(coin))+' $ gebrochen - Uptrend bestätigt. Longs haben Rückenwind.';
+  }
+  // Im Uptrend: Bruch unter letztes Tief = CHoCH Bearish = Trendwechsel!
+  else if(minRecent<lastL.p && price<lastL.p){
+   event='CHoCH BÄRISCH ⚠️'; eventType='CHOCH_DOWN'; eventLevel=lastL.p; eventBonus=-20; blockLong=true;
+   desc='Preis hat letztes Tief '+lastL.p.toFixed(dec(coin))+' $ gebrochen - Uptrend ist GEBROCHEN! Kein Long mehr, Trend dreht.';
+  }
+ }
+ if(trend==='DOWNTREND'||trend==='SEITWÄRTS'){
+  if(minRecent<lastL.p && price<prevL.p){
+   event='BOS BÄRISCH ✅'; eventType='BOS_DOWN'; eventLevel=lastL.p; eventBonus=-12;
+   desc='Preis hat letztes Tief '+lastL.p.toFixed(dec(coin))+' $ gebrochen - Downtrend bestätigt. Shorts haben Rückenwind.';
+  }
+  else if(maxRecent>lastH.p && price>lastH.p){
+   event='CHoCH BULLISH ⚠️'; eventType='CHOCH_UP'; eventLevel=lastH.p; eventBonus=20; blockShort=true;
+   desc='Preis hat letztes Hoch '+lastH.p.toFixed(dec(coin))+' $ gebrochen - Downtrend ist GEBROCHEN! Kein Short mehr, Trend dreht.';
+  }
+ }
+ // Wenn kein frischer Bruch, zeige das nächste Level das beobachtet werden muss
+ var nextLevel = trend==='UPTREND'?lastH.p:trend==='DOWNTREND'?lastL.p:Math.abs(price-lastH.p)<Math.abs(price-lastL.p)?lastH.p:lastL.p;
+ return {trend:trend, event:event, eventType:eventType, eventLevel:eventLevel, eventBonus:eventBonus, blockLong:blockLong, blockShort:blockShort, desc:desc, lastH:lastH, prevH:prevH, lastL:lastL, prevL:prevL, nextLevel:nextLevel, price:price};
+ }catch(e){ log('FEHLER Struktur: '+e.message); return null; }
+}
+// ===== NEU 2a: Fair Value Gaps =====
+// Bullish FVG: Low von Kerze i+2 > High von Kerze i => Lücke nach oben, wird oft wieder gefüllt
+// Bearish FVG: High von Kerze i+2 < Low von Kerze i => Lücke nach unten
+// Nur die letzten 50 Kerzen, nur wenn die Lücke noch nicht gefüllt wurde (Preis war seitdem nicht drin)
+function detectFVG(candles){
+ try{
+ var fvgs=[];
+ var price=candles[candles.length-1].close;
+ // Suche in den letzten 80 Kerzen
+ var start=Math.max(0, candles.length-80);
+ for(var i=start;i<candles.length-2;i++){
+  var c1=candles[i], c2=candles[i+1], c3=candles[i+2];
+  // Bullish FVG: starke grüne mittlere Kerze, Lücke nach oben
+  if(c3.low>c1.high){
+   var gapTop=c3.low, gapBottom=c1.high, gapSize=gapTop-gapBottom;
+   // Nur wenn Lücke mindestens 0.3% groß ist (sonst Rauschen)
+   if(gapSize/c1.high<0.003) continue;
+   // Wurde die Lücke schon gefüllt? Prüfe alle Kerzen nach i+2 bis heute
+   var filled=false, filledIdx=-1;
+   for(var j=i+3;j<candles.length;j++){ if(candles[j].low<=gapTop && candles[j].high>=gapBottom){ filled=true; filledIdx=j; break; } }
+   // Nur offene (nicht gefüllte) Gaps sind interessant
+   if(!filled){
+    var inGap = price>=gapBottom && price<=gapTop;
+    fvgs.push({type:'BULLISH', top:gapTop, bottom:gapBottom, mid:(gapTop+gapBottom)/2, size:gapSize, idx:i, inGap:inGap, age:candles.length-i});
+   }
+  }
+  // Bearish FVG: starke rote mittlere Kerze, Lücke nach unten
+  if(c3.high<c1.low){
+   var gTop2=c1.low, gBottom2=c3.high, gSize2=gTop2-gBottom2;
+   if(gSize2/c1.low<0.003) continue;
+   var filled2=false;
+   for(var k=i+3;k<candles.length;k++){ if(candles[k].low<=gTop2 && candles[k].high>=gBottom2){ filled2=true; break; } }
+   if(!filled2){
+    var inGap2 = price>=gBottom2 && price<=gTop2;
+    fvgs.push({type:'BEARISH', top:gTop2, bottom:gBottom2, mid:(gTop2+gBottom2)/2, size:gSize2, idx:i, inGap:inGap2, age:candles.length-i});
+   }
+  }
+ }
+ // Sortiere: zuerst die, wo der Preis gerade drin ist, dann die frischesten
+ fvgs.sort(function(a,b){ if(a.inGap&&!b.inGap) return -1; if(!a.inGap&&b.inGap) return 1; return a.age-b.age; });
+ // Nimm nur die 3 nächsten / wichtigsten
+ return fvgs.slice(0,3);
+ }catch(e){ log('FEHLER FVG: '+e.message); return []; }
+}
+// ===== NEU 2b: Order Blocks =====
+// Bullish OB: Letzte rote Kerze VOR einer starken grünen Bewegung (mind. 2% in 3 Kerzen)
+// Die Großen haben in dieser roten Kerze gekauft, dann ging es hoch
+// Wenn der Preis zurück in diese Kerze kommt, kaufen sie wieder
+function detectOrderBlocks(candles){
+ try{
+ var obs=[];
+ var price=candles[candles.length-1].close;
+ var start=Math.max(0, candles.length-100);
+ for(var i=start;i<candles.length-3;i++){
+  var c=candles[i];
+  var next1=candles[i+1], next2=candles[i+2], next3=candles[i+3];
+  // Bullish OB: c ist rot, danach 3 grüne Kerzen mit +2% Move
+  var isRed = c.close<c.open;
+  var moveUp = (next3.close - c.low)/c.low;
+  if(isRed && moveUp>0.02){
+   // Wurde der OB schon durchbrochen (Preis unter Low)?
+   var broken=false;
+   for(var j=i+4;j<candles.length;j++){ if(candles[j].low<c.low){ broken=true; break; } }
+   if(!broken){
+    var inOB = price>=c.low && price<=c.high;
+    obs.push({type:'BULLISH', top:c.high, bottom:c.low, mid:(c.high+c.low)/2, idx:i, inOB:inOB, age:candles.length-i, move:moveUp});
+   }
+  }
+  // Bearish OB: c ist grün, danach 3 rote Kerzen mit -2% Move
+  var isGreen = c.close>c.open;
+  var moveDown = (c.high - next3.close)/c.high;
+  if(isGreen && moveDown>0.02){
+   var broken2=false;
+   for(var k=i+4;k<candles.length;k++){ if(candles[k].high>c.high){ broken2=true; break; } }
+   if(!broken2){
+    var inOB2 = price>=c.low && price<=c.high;
+    obs.push({type:'BEARISH', top:c.high, bottom:c.low, mid:(c.high+c.low)/2, idx:i, inOB:inOB2, age:candles.length-i, move:moveDown});
+   }
+  }
+ }
+ obs.sort(function(a,b){ if(a.inOB&&!b.inOB) return -1; if(!a.inOB&&b.inOB) return 1; return a.age-b.age; });
+ return obs.slice(0,3);
+ }catch(e){ log('FEHLER OB: '+e.message); return []; }
+}
+function drawChart(){
+ try{
+  if(typeof LightweightCharts==='undefined'){ log('FEHLER: Chart-Library nicht geladen'); return; }
+  var el=$('chart');
+  if(!chart){
+   chart=LightweightCharts.createChart(el,{layout:{background:{color:'#0b0d12'},textColor:'#aaa'},grid:{vertLines:{color:'#1a1d25'},horzLines:{color:'#1a1d25'}},timeScale:{timeVisible:true},width:el.clientWidth,height:380});
+   series=chart.addCandlestickSeries({upColor:'#00e676',downColor:'#ff5252',wickUpColor:'#00e676',wickDownColor:'#ff5252'});
+   vwapSeries=chart.addLineSeries({color:'#e879f9',lineWidth:2,priceLineVisible:false,lastValueVisible:true,crosshairMarkerVisible:true,title:'VWAP'});
+  }
+  series.setData(state.candles);
+  for(var i=0;i<priceLines.length;i++){try{series.removePriceLine(priceLines[i]);}catch(e){}}priceLines=[];
+  // Fibo
+  if(state.fib){var keys=Object.keys(state.fib);for(var k=0;k<keys.length;k++){var kk=keys[k];priceLines.push(series.createPriceLine({price:state.fib[kk],color:kk==='0.618'?'#ff6d00':kk==='0.382'?'#ff6d00':'#2962ff',lineWidth:(kk==='0.382'||kk==='0.618')?3:1,lineStyle:0,axisLabelVisible:true,title:'FIBO '+kk}));}}
+  // S/R
+  if(state.sr){
+   if(state.sr.support) for(var s=0;s<state.sr.support.length;s++){ priceLines.push(series.createPriceLine({price:state.sr.support[s].price,color:'#00e676',lineWidth:2,lineStyle:2,axisLabelVisible:true,title:'SUPPORT x'+state.sr.support[s].count})); }
+   if(state.sr.resistance) for(var r=0;r<state.sr.resistance.length;r++){ priceLines.push(series.createPriceLine({price:state.sr.resistance[r].price,color:'#ff5252',lineWidth:2,lineStyle:2,axisLabelVisible:true,title:'RESISTANCE x'+state.sr.resistance[r].count})); }
+  }
+  // BOS / CHoCH Level
+  if(state.structure && state.structure.eventLevel>0){
+   var isBos = state.structure.eventType.indexOf('BOS')>=0;
+   priceLines.push(series.createPriceLine({price:state.structure.eventLevel,color:isBos?'#00e676':'#ff5252',lineWidth:3,lineStyle:0,axisLabelVisible:true,title:state.structure.event}));
+  }
+  // FVG: Obere + untere Kante als Linien (so sieht man die Zone)
+  if(state.fvgs) for(var f=0;f<state.fvgs.length;f++){
+   var fv=state.fvgs[f];
+   var col=fv.type==='BULLISH'?'#3b82f6':'#f97316';
+   priceLines.push(series.createPriceLine({price:fv.top,color:col,lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'FVG '+fv.type}));
+   priceLines.push(series.createPriceLine({price:fv.bottom,color:col,lineWidth:1,lineStyle:2,axisLabelVisible:true,title:'FVG '+fv.type}));
+  }
+  // Order Blocks: Obere + untere Kante
+  if(state.obs) for(var o=0;o<state.obs.length;o++){
+   var ob=state.obs[o];
+   priceLines.push(series.createPriceLine({price:ob.top,color:'#a855f7',lineWidth:2,lineStyle:2,axisLabelVisible:true,title:'OB '+ob.type}));
+   priceLines.push(series.createPriceLine({price:ob.bottom,color:'#a855f7',lineWidth:2,lineStyle:2,axisLabelVisible:true,title:'OB '+ob.type}));
+  }
+  if(state.vwapSeries) vwapSeries.setData(state.vwapSeries);
+  series.setMarkers([]);
+  chart.timeScale().fitContent();
+ }catch(e){ log('FEHLER Chart: '+e.message); }
+}
+async function load(){
+ try{
+ syncHeads();
+ var cfg=TF_CONFIG[tf];
+ var interval=cfg.binance;
+ var gran=cfg.gran;
+ log('Lade '+coin+' '+tfLabel(tf)+' mit '+cfg.limit+' Kerzen ...');
+ var res=await getKlines(coin+'USDT',interval,gran,cfg.limit);
+ if(tf==='1y'&&res.data.length>52){ res.data=res.data.slice(-52); }
+ log('getKlines fertig: '+res.src+' mit '+res.data.length+' Kerzen');
+ if(!res.data.length){$('statusLine').textContent='KEINE DATEN für '+coin;calc();return;}
+ var closes=[];for(var i=0;i<res.data.length;i++)closes.push(res.data[i].close);
+ var price=closes[closes.length-1];
+ var r=rsiCalc(closes,14);
+ var macd=(ema(closes,12)-ema(closes,26))*0.1;
+ var sw=findSwingSmart(res.data);
+ var fib=calcFibo(sw.high,sw.low,sw.up);
+ var ell=detectElliott(res.data);
+ var atr=calcATR(res.data,14);
+ var vwapObj=calcVWAP(res.data, cfg.vwapLook);
+ var sr=calcSR(res.data, cfg.srLook);
+ var sweep=detectSweep(res.data);
+ var struct=detectStructure(res.data);
+ var fvgs=detectFVG(res.data);
+ var obs=detectOrderBlocks(res.data);
+ log('NEU: Struktur '+ (struct?struct.trend+' / '+struct.event:'-') +' | FVG '+fvgs.length+' offen | OB '+obs.length+' offen');
+ var btcRes=await getKlines('BTCUSDT','1h',3600,200);
+ var btcTrend='NEUTRAL',btcPrice=0,btcRsi=50;
+ if(btcRes.data.length>50){var bc=[];for(var b=0;b<btcRes.data.length;b++)bc.push(btcRes.data[b].close);btcPrice=bc[bc.length-1];btcRsi=rsiCalc(bc,14);var e=ema(bc,50);btcTrend=btcPrice>e&&btcRsi>50?'BULLISCH':btcPrice<e&&btcRsi<50?'BÄRISCH':'NEUTRAL';}
+ var sum=0;for(var s1=0;s1<20;s1++)sum+=res.data.slice(-20)[s1].vol||0;var avg20=sum/20;var lastV=res.data[res.data.length-1].vol||0;var volRatio=avg20>0?lastV/avg20:1;
+ var upDay=price>closes[closes.length-2];
+ var vol=upDay&&volRatio>1.3?'ECHT':upDay&&volRatio<0.7?'FAKE':!upDay&&volRatio>1.5?'PANIK':'NEUTRAL';
+ var div='KEINE';if(closes.length>=30){var a=closes.slice(-30,-15),bb=closes.slice(-15);var t1=Math.min.apply(null,a),t2=Math.min.apply(null,bb),h1=Math.max.apply(null,a),h2=Math.max.apply(null,bb);var r1=rsiCalc(closes.slice(0,closes.length-15),14);if(t2<t1&&r>r1)div='BULLISCHE DIVERGENZ';else if(h2>h1&&r<r1)div='BÄRISCHE DIVERGENZ';}
+ var dom={btc:0,usdt:0,alt:0};try{var g=await fetchJson('https://api.coinpaprika.com/v1/global');if(g){dom.btc=g.bitcoin_dominance_percentage||0;dom.usdt=4.5;dom.alt=100-dom.btc-12-dom.usdt;}}catch(e){}
+ state={price:price,rsi:r,macd:macd,high:sw.high,low:sw.low,fib:fib,elliott:ell,atr:atr,vwap:vwapObj.value,vwapSeries:vwapObj.series,sr:sr,sweep:sweep,structure:struct,fvgs:fvgs,obs:obs,btc:{price:btcPrice,rsi:btcRsi,trend:btcTrend},vol:vol,volRatio:volRatio,div:div,dom:dom,candles:res.data};
+ $('priceBig').textContent=fmt(price);
+ $('priceSrc').textContent='Quelle: '+res.src+' - '+res.data.length+' Kerzen - #'+coinInfo(coin).rank+' '+coinInfo(coin).n;
+ $('vwapLine').textContent='VWAP ('+vwapObj.look+' Kerzen): '+vwapObj.value.toFixed(dec(coin))+' $ - '+(price>vwapObj.value?'über VWAP ✅':'unter VWAP ⚠️');
+ $('vwapLine').style.color=price>vwapObj.value?'#00e676':'#ff5252';
+ $('rsiBig').textContent=r.toFixed(1);
+ $('rsiBig').style.color=r<30?'#00e676':r<70?'#ffca28':'#ff5252';
+ $('rsiBar').style.width=r+'%';$('rsiBar').style.background=r<30?'#00e676':r<70?'#ffca28':'#ff5252';
+ $('rsiBadge').textContent=r<30?'ÜBERVERKAUFT!':r<40?'Fast überverkauft':r<50?'Neutral, leicht bärisch':r<70?'Neutral, leicht bullisch':'ÜBERKAUFT!';
+ $('rsiBadge').className='badge '+(r<30?'g':r<70?'y':'r');
+ $('fibInfo').textContent='FULL Swing aus '+sw.look+' Kerzen: '+fmt(sw.high)+' / '+fmt(sw.low)+' - Preis: '+fmt(price)+' - '+cfg.info;
+ $('srInfo').textContent=(sr.nearestSupport?'Support: '+sr.nearestSupport.price.toFixed(dec(coin))+' $ (x'+sr.nearestSupport.count+') ':'')+(sr.nearestResistance?' | Resistance: '+sr.nearestResistance.price.toFixed(dec(coin))+' $ (x'+sr.nearestResistance.count+')':'');
+ $('bosInfo').textContent=struct?(struct.trend+' | '+struct.event+' | Nächstes Level: '+struct.nextLevel.toFixed(dec(coin))+' $'):'Keine Struktur';
+ $('statusLine').textContent='OK '+coin+' '+tfLabel(tf)+' geladen via '+res.src+' ('+res.data.length+' Kerzen) - '+new Date().toLocaleTimeString('de-DE');
+ log('OK '+coin+': '+price.toFixed(dec(coin))+' $ RSI '+r.toFixed(1)+' via '+res.src);
+ drawChart();
+ calc();
+ }catch(e){ log('FEHLER in load(): '+e.message); }
+}
+function calc(){
+ try{
+ var myEntry=num($('myEntry').value);
+ var price=state.price||myEntry||0;
+ var isFallback=!state.price;
+ if(isFallback&&price>0){state.price=price;state.rsi=50;state.macd=0;state.fib=calcFibo(price*1.15,price*0.85,true);state.high=price*1.15;state.low=price*0.85;state.atr=price*0.02;state.vwap=price;state.sr={support:[],resistance:[],nearestSupport:null,nearestResistance:null};state.sweep='KEIN';state.volRatio=1;state.structure=null;state.fvgs=[];state.obs=[];}
+ if(!price){$('signalReason').textContent='Kein Preis - tippe JETZT LADEN oder Einstieg eingeben.';return;}
+ var rsi=state.rsi,macd=state.macd,fib=state.fib;
+ var inGold=price>=Math.min(fib['0.382'],fib['0.618'])&&price<=Math.max(fib['0.382'],fib['0.618']);
+ var pB=0,pBa=0;
+ if(price>fib['0.382'])pB++;else pBa++;
+ if(price>fib['0.5'])pB++;else pBa++;
+ if(inGold&&rsi<45)pB++;if(inGold&&rsi>55)pBa++;
+ if(rsi<30)pB+=2;else if(rsi<40)pB++;else if(rsi>70)pBa+=2;else if(rsi>60)pBa++;
+ if(macd>0)pB++;else pBa++;
+ var sig=pB>=3&&pBa<=1?'BULLISCH':pBa>=3&&pB<=1?'BÄRISCH':'BODENBILDUNG';
+ LA[tf]={sig:sig,rsi:rsi,price:price};
+ var sc=50,det=[];
+ if(sig==='BULLISCH'){sc+=10;det.push('Fibo BULLISCH +10');}if(sig==='BÄRISCH'){sc-=10;det.push('Fibo BÄRISCH -10');}
+ if(inGold&&rsi<45){sc+=6;det.push('Golden Zone +6');}if(inGold&&rsi>55){sc-=6;det.push('Golden Zone -6');}
+ if(rsi<30){sc+=8;det.push('RSI überverkauft +8');}else if(rsi<40){sc+=4;det.push('RSI tief +4');}else if(rsi>70){sc-=8;det.push('RSI überkauft -8');}else if(rsi>60){sc-=4;det.push('RSI hoch -4');}
+ if(macd>0){sc+=3;det.push('MACD +3');}else{sc-=3;det.push('MACD -3');}
+ if(price>state.vwap){sc+=8;det.push('Preis über VWAP +8');}else{sc-=8;det.push('Preis unter VWAP -8');}
+ if(state.sr&&state.sr.nearestSupport&&Math.abs(price-state.sr.nearestSupport.price)/price<0.01){sc+=6;det.push('An Support +6 (x'+state.sr.nearestSupport.count+')');}
+ if(state.sr&&state.sr.nearestResistance&&Math.abs(price-state.sr.nearestResistance.price)/price<0.01){sc-=6;det.push('An Resistance -6 (x'+state.sr.nearestResistance.count+')');}
+ // NEU 1: BOS / CHoCH - stärkster Faktor
+ var struct=state.structure;
+ if(struct){
+  if(struct.eventBonus!==0){ sc+=struct.eventBonus; det.push('Struktur '+struct.event+' '+(struct.eventBonus>0?'+':'')+struct.eventBonus); }
+  if(struct.trend==='UPTREND'&&sig==='BULLISCH'){sc+=4;det.push('Trend UPTREND bestätigt +4');}
+  if(struct.trend==='DOWNTREND'&&sig==='BÄRISCH'){sc+=4;det.push('Trend DOWNTREND bestätigt +4');}
+  if(struct.trend==='UPTREND'&&sig==='BÄRISCH'){sc-=6;det.push('Gegen Uptrend -6');}
+  if(struct.trend==='DOWNTREND'&&sig==='BULLISCH'){sc-=6;det.push('Gegen Downtrend -6');}
+ }
+ // NEU 2: FVG + OB - bester Einstieg
+ var inFVG=false, inOB=false, fvgType='', obType='';
+ if(state.fvgs) for(var fi=0;fi<state.fvgs.length;fi++){ if(state.fvgs[fi].inGap){ inFVG=true; fvgType=state.fvgs[fi].type; break; } }
+ if(state.obs) for(var oi=0;oi<state.obs.length;oi++){ if(state.obs[oi].inOB){ inOB=true; obType=state.obs[oi].type; break; } }
+ if(inFVG&&fvgType==='BULLISH'&&sig==='BULLISCH'){sc+=8;det.push('Preis in Bullish FVG +8 - Lücke wird gefüllt, idealer Long-Einstieg');}
+ if(inFVG&&fvgType==='BEARISH'&&sig==='BÄRISCH'){sc+=8;det.push('Preis in Bearish FVG +8');}
+ if(inFVG&&fvgType==='BULLISH'&&sig==='BÄRISCH'){sc-=5;det.push('In Bullish FVG, aber Short-Signal -5');}
+ if(inFVG&&fvgType==='BEARISH'&&sig==='BULLISCH'){sc-=5;det.push('In Bearish FVG, aber Long-Signal -5');}
+ if(inOB&&obType==='BULLISH'&&sig==='BULLISCH'){sc+=10;det.push('Preis in Bullish Order Block +10 ⭐ - hier kaufen die Großen');}
+ if(inOB&&obType==='BEARISH'&&sig==='BÄRISCH'){sc+=10;det.push('Preis in Bearish Order Block +10 ⭐');}
+ if(inOB&&inFVG){sc+=5;det.push('FVG + OB Übereinstimmung +5 - sehr starker Einstieg');}
+ if(state.sweep.indexOf('BULLISH SWEEP')>=0){sc+=10;det.push('Bullish Sweep +10');}
+ if(state.sweep.indexOf('BEARISH SWEEP')>=0){sc-=10;det.push('Bearish Sweep -10');}
+ if(state.sweep.indexOf('ECHTER AUSBRUCH NACH OBEN')>=0){sc+=6;det.push('Echter Ausbruch +6');}
+ if(state.sweep.indexOf('ECHTER AUSBRUCH NACH UNTEN')>=0){sc-=6;det.push('Echter Ausbruch -6');}
+ if(state.btc.trend==='BULLISCH'){sc+=6;det.push('BTC +6');}if(state.btc.trend==='BÄRISCH'){sc-=6;det.push('BTC -6');}
+ if(state.div.indexOf('BULLISCHE')>=0){sc+=8;det.push('Bull Div +8');}if(state.div.indexOf('BÄRISCHE')>=0){sc-=8;det.push('Bär Div -8');}
+ if(state.volRatio>1.3&&sig==='BULLISCH'){sc+=6;det.push('Volumen bestätigt +6 (x'+state.volRatio.toFixed(1)+')');}
+ if(state.volRatio>1.3&&sig==='BÄRISCH'){sc-=6;det.push('Volumen bestätigt -6 (x'+state.volRatio.toFixed(1)+')');}
+ if(state.volRatio<0.7){sc-=6;det.push('Volumen zu schwach -6');}
+ if(state.elliott&&state.elliott.bonus){sc+=state.elliott.bonus;det.push('Elliott '+state.elliott.welle+' '+state.elliott.bonus);}
+ var mtfMsg='Noch nicht alle Zeiten getippt.';
+ var mtfBonus=0;
+ if(LA['1w']&&LA['1y']){
+  var agreeW = LA['1w'].sig===sig;
+  var agreeY = LA['1y'].sig===sig;
+  if(agreeW&&agreeY){ mtfBonus=10; mtfMsg='✅ 1W + 1Y bestätigen dein '+sig; }
+  else if(!agreeW&&!agreeY){ mtfBonus=-12; mtfMsg='❌ 1W + 1Y sind GEGEN dich ('+LA['1w'].sig+' / '+LA['1y'].sig+')'; }
+  else{ mtfBonus=0; mtfMsg='⚠️ Gemischt: 1W='+LA['1w'].sig+' | 1Y='+LA['1y'].sig; }
+  sc+=mtfBonus;
+  if(mtfBonus!==0) det.push('MTF '+(mtfBonus>0?'+':'')+mtfBonus);
+ }
+ sc=Math.max(0,Math.min(100,sc));
+ var atr=state.atr||price*0.02;
+ var ent='WARTEN',grund='',entry=price,stop=price*0.98,target=price*1.02;
+ var blocked=false;
+ // NEU: CHoCH blockiert
+ if(struct&&struct.blockLong&&sig==='BULLISCH'){blocked=true;grund='CHoCH BÄRISCH - Uptrend gebrochen bei '+struct.eventLevel.toFixed(dec(coin))+' $. Kein Long!';}
+ else if(struct&&struct.blockShort&&sig==='BÄRISCH'){blocked=true;grund='CHoCH BULLISH - Downtrend gebrochen bei '+struct.eventLevel.toFixed(dec(coin))+' $. Kein Short!';}
+ else if(state.btc.trend==='BÄRISCH'&&sig==='BULLISCH'){blocked=true;grund='BTC ist BÄRISCH - blockiert deinen Long.';}
+ else if(state.volRatio<0.7&&sc<70){blocked=true;grund='Volumen zu schwach ('+state.volRatio.toFixed(1)+'x).';}
+ else if(state.div.indexOf('BÄRISCHE')>=0&&sig==='BULLISCH'){blocked=true;grund='Bärische Divergenz - blockiert.';}
+ else if(state.sweep.indexOf('BEARISH SWEEP')>=0&&sig==='BULLISCH'){blocked=true;grund='Bearish Sweep - das Hoch war ein Fake-Ausbruch.';}
+ else if(state.elliott&&state.elliott.welle.indexOf('WELLE 4')>=0){blocked=true;grund='Elliott in Welle 4 - warte.';}
+ else if(mtfBonus<=-12){blocked=true;grund='1W + 1Y sind gegen dich.';}
+ // NEU: Bester Einstieg = in OB + FVG -> Eintritt = Mitte der Zone, nicht aktueller Preis
+ else if(sc>=65&&sig==='BULLISCH'){
+  ent='LONG';
+  if(inOB&&obType==='BULLISH'){
+   var ob=state.obs.find(function(x){return x.inOB;});
+   entry=ob?ob.mid:price; grund='Score '+sc+' + BULLISCH + Preis in Order Block - EINTRITT IN DER ZONE!';
+  } else if(inFVG&&fvgType==='BULLISH'){
+   var fv=state.fvgs.find(function(x){return x.inGap;});
+   entry=fv?fv.mid:price; grund='Score '+sc+' + BULLISCH + Preis in FVG - EINTRITT IN DER LÜCKE!';
+  } else { grund='Score '+sc+' + BULLISCH + VWAP + BOS.'; entry=price; }
+  stop=entry-atr*1.5; target=entry+atr*2.5;
+ }
+ else if(sc<=35&&sig==='BÄRISCH'){
+  ent='SHORT';
+  if(inOB&&obType==='BEARISH'){
+   var ob2=state.obs.find(function(x){return x.inOB;});
+   entry=ob2?ob2.mid:price; grund='Score '+sc+' + BÄRISCH + Preis in Bearish Order Block.';
+  } else if(inFVG&&fvgType==='BEARISH'){
+   var fv2=state.fvgs.find(function(x){return x.inGap;});
+   entry=fv2?fv2.mid:price; grund='Score '+sc+' + BÄRISCH + Preis in Bearish FVG.';
+  } else { grund='Score '+sc+' + BÄRISCH.'; entry=price; }
+  stop=entry+atr*1.5; target=entry-atr*2.5;
+ }
+ else if(sc>=80){ent='LONG';grund='Score '+sc+' extrem stark.';entry=price;stop=price-atr*1.5;target=price+atr*3;}
+ else if(sc<=20){ent='SHORT';grund='Score '+sc+' extrem schwach.';entry=price;stop=price+atr*1.5;target=price-atr*3;}
+ else{grund=sc>=45?'Score '+sc+' zu schwach für einen Trade.':sig==='BODENBILDUNG'?'Signal ist BODENBILDUNG - warten.':'Keine klare Kante.';}
+ var risk=Math.abs(entry-stop),chance=Math.abs(target-entry),rrv=risk>0?(chance/risk).toFixed(1):'0';
+ var box=$('signalBox');box.className='signal '+(ent==='LONG'?'long':ent==='SHORT'?'short':'wait');
+ $('signalText').textContent=ent==='LONG'?'LONG':ent==='SHORT'?'SHORT':'WARTEN';
+ $('signalReason').textContent=(blocked?'BLOCKIERT: ':'')+grund+(isFallback?' | FALLBACK - keine Live-Daten':'');
+ $('vEntry').textContent=entry.toFixed(dec(coin))+' $';
+ $('vStop').textContent=stop.toFixed(dec(coin))+' $';
+ $('vTarget').textContent=target.toFixed(dec(coin))+' $';
+ $('vRrv').textContent='Risiko '+(risk/price*100).toFixed(1)+'% - Chance '+(chance/price*100).toFixed(1)+'% - CRV 1 : '+rrv;
+ $('vAtr').textContent='ATR (14): '+atr.toFixed(dec(coin))+' $ = '+(atr/price*100).toFixed(2)+'% - Stop = 1.5x ATR, Ziel = 2.5x ATR';
+ $('scoreBig').innerHTML=sc+' <span style="font-size:16px;color:#888">/ 100</span>';
+ $('scoreBig').style.color=sc>=65?'#00e676':sc>=45?'#ffca28':'#ff5252';
+ $('scoreBar').style.width=sc+'%';$('scoreBar').style.background=sc>=65?'#00e676':sc>=45?'#ffca28':'#ff5252';
+ $('scoreDet').innerHTML=det.join('<br>');
+ var fh='';var levels=['0','0.236','0.382','0.5','0.618','0.786','1','-0.272','-0.618'];for(var li=0;li<levels.length;li++){var f=levels[li];var near=Math.abs(fib[f]-price)<Math.abs(state.high-state.low)*0.05;fh+='<div class="frow '+(f==='0.382'||f==='0.618'?'gold':'')+'"><span>'+f+' Fib '+(f==='0.382'||f==='0.618'?'Golden':'')+'</span><span><b>'+fib[f].toFixed(dec(coin))+' $</b>'+(near?'<span class="here">DU BIST HIER</span>':'')+'</span></div>';}
+ $('fibList').innerHTML=(isFallback?'<div style="background:#2a2200;padding:10px;border-radius:10px;text-align:center">FALLBACK - Tippe JETZT LADEN</div>':'')+fh;
+ $('elliottBox').innerHTML=state.elliott?'<b>'+state.elliott.welle+'</b><br>W3-Ziel: <b>'+state.elliott.z3.toFixed(dec(coin))+' $</b> - W5-Ziel: <b>'+state.elliott.z5.toFixed(dec(coin))+' $</b>':'Kein gültiger Elliott-Impuls.';
+ // NEU 1 Anzeige
+ if(struct){
+  var cls=struct.eventType==='CHOCH_DOWN'||struct.eventType==='CHOCH_UP'?'chochbox':'bosbox';
+  $('structureBox').innerHTML='<div class="'+cls+'"><b>Trend: '+struct.trend+'</b><br><b>Event: '+struct.event+'</b><br>'+(struct.desc||'')+'<br><br>Letztes Hoch: <b>'+struct.lastH.p.toFixed(dec(coin))+' $</b> (Kerze '+struct.lastH.i+')<br>Vorletztes Hoch: <b>'+struct.prevH.p.toFixed(dec(coin))+' $</b><br>Letztes Tief: <b>'+struct.lastL.p.toFixed(dec(coin))+' $</b> (Kerze '+struct.lastL.i+')<br>Vorletztes Tief: <b>'+struct.prevL.p.toFixed(dec(coin))+' $</b><br><br>Nächstes Level das brechen muss: <b>'+struct.nextLevel.toFixed(dec(coin))+' $</b><br>Aktuell: '+struct.price.toFixed(dec(coin))+' $ - Abstand: '+((struct.price-struct.nextLevel)/struct.nextLevel*100).toFixed(2)+'%</div>';
+ }else{
+  $('structureBox').innerHTML='Keine klare Struktur.';
+ }
+ // NEU 2 Anzeige
+ var fvgHtml='', obHtml='';
+ if(state.fvgs&&state.fvgs.length){
+  fvgHtml='<div class="fvgbox"><b>Offene Fair Value Gaps ('+state.fvgs.length+'):</b><br>';
+  for(var fvi=0;fvi<state.fvgs.length;fvi++){var fv=state.fvgs[fvi]; fvgHtml+='- '+fv.type+' FVG: <b>'+fv.bottom.toFixed(dec(coin))+' $ - '+fv.top.toFixed(dec(coin))+' $</b> (Mitte: '+fv.mid.toFixed(dec(coin))+' $) '+(fv.inGap?'⭐ <b>PREIS IST GERADE DRIN - hier einsteigen!</b>':' - '+fv.age+' Kerzen alt')+'<br>';}
+  fvgHtml+='</div>';
+ }else{ fvgHtml='<div>Keine offenen FVGs - alle Lücken schon gefüllt.</div>'; }
+ if(state.obs&&state.obs.length){
+  obHtml='<div class="obbox" style="margin-top:10px"><b>Order Blocks ('+state.obs.length+'):</b><br>';
+  for(var obi=0;obi<state.obs.length;obi++){var obx=state.obs[obi]; obHtml+='- '+obx.type+' OB: <b>'+obx.bottom.toFixed(dec(coin))+' $ - '+obx.top.toFixed(dec(coin))+' $</b> (Mitte: '+obx.mid.toFixed(dec(coin))+' $) - Move danach: +'+(obx.move*100).toFixed(1)+'% '+(obx.inOB?'⭐ <b>PREIS IST GERADE DRIN - hier kaufen die Großen!</b>':' - '+obx.age+' Kerzen alt')+'<br>';}
+  obHtml+='</div>';
+ }else{ obHtml='<div style="margin-top:10px">Keine Order Blocks gefunden.</div>'; }
+ $('fvgObBox').innerHTML=fvgHtml+obHtml+'<div style="margin-top:10px;font-size:12px;color:#888">So nutzt du es: Warte, bis der Preis in eine blaue FVG oder lila OB Zone kommt. Das ist dein Einstieg, nicht mitten im Nirgendwo. Wenn FVG + OB sich überlappen, ist das der stärkste Einstieg.</div>';
+ $('newBox').innerHTML='<b>Kerzen:</b> '+state.candles.length+' ('+TF_CONFIG[tf].range+')<br><b>VWAP:</b> aus '+TF_CONFIG[tf].vwapLook+' Kerzen = '+state.vwap.toFixed(dec(coin))+' $ - '+(price>state.vwap?'über':'unter')+' VWAP<br><b>ATR:</b> '+atr.toFixed(dec(coin))+' $<br><b>Support:</b> '+(state.sr&&state.sr.support.length?state.sr.support.map(function(x){return x.price.toFixed(dec(coin))+' $ (x'+x.count+')';}).join(' | '):'kein Support')+'<br><b>Resistance:</b> '+(state.sr&&state.sr.resistance.length?state.sr.resistance.map(function(x){return x.price.toFixed(dec(coin))+' $ (x'+x.count+')';}).join(' | '):'keine Resistance')+'<br><b>Sweep:</b> '+state.sweep+'<br><b>Volumen:</b> '+state.vol+' (x'+state.volRatio.toFixed(1)+')';
+ $('mtfBox').innerHTML=mtfMsg+'<br>15M: '+(LA['15m']?LA['15m'].sig:'-')+' | 1H: '+(LA['1h']?LA['1h'].sig:'-')+' | 1D: '+(LA['1d']?LA['1d'].sig:'-')+' | 1W: '+(LA['1w']?LA['1w'].sig:'-')+' | 1M: '+(LA['1M']?LA['1M'].sig:'-')+' | 1Y: '+(LA['1y']?LA['1y'].sig:'-');
+ $('planBox').innerHTML='<b>Plan - '+coin+' '+tfLabel(tf)+' - '+ent+' - Score '+sc+'/100 - #'+coinInfo(coin).rank+' '+coinInfo(coin).n+'</b><br>'+grund+'<br><br>Eintritt: '+entry.toFixed(dec(coin))+' $<br>Stop (1.5x ATR): '+stop.toFixed(dec(coin))+' $<br>Ziel (2.5x ATR): '+target.toFixed(dec(coin))+' $<br><br>Teilverkauf 1 bei '+fib['0.786'].toFixed(dec(coin))+' $ - 50% raus<br>Teilverkauf 2 bei '+fib['0.618'].toFixed(dec(coin))+' $ - Rest raus<br>VWAP: '+state.vwap.toFixed(dec(coin))+' $'+(state.sr&&state.sr.nearestSupport?'<br>Nächster Support: '+state.sr.nearestSupport.price.toFixed(dec(coin))+' $':'')+(struct?'<br>Struktur: '+struct.trend+' - '+struct.event:'')+(inOB?' <br>⭐ EINTRITT IN ORDER BLOCK':'')+(inFVG?' <br>⭐ EINTRITT IN FVG':'');
+ var allTfs=['15m','1h','1d','1w','1M','1y'];
+ var all5=allTfs.every(function(t){return LA[t];});
+ var five=all5?('15M: '+LA['15m'].sig+' | 1H: '+LA['1h'].sig+' | 1D: '+LA['1d'].sig+' | 1W: '+LA['1w'].sig+' | 1M: '+LA['1M'].sig+' | 1Y: '+LA['1y'].sig):'Tipp alle 6 Zeiten einmal an.';
+ $('checkBox').innerHTML='<b>'+(blocked?'NICHT TRADEN':'OK '+ent)+'</b> | Score <b>'+sc+'/100</b><br>- Coin: '+coin+' #'+coinInfo(coin).rank+' '+coinInfo(coin).n+' - Gruppe '+coinInfo(coin).grp+'<br>- Signal: '+sig+'<br>- Struktur: '+(struct?struct.trend+' - '+struct.event:'-')+'<br>- FVG offen: '+(state.fvgs?state.fvgs.length:0)+' | OB offen: '+(state.obs?state.obs.length:0)+' | Preis in FVG: '+(inFVG?'JA ⭐':'NEIN')+' | Preis in OB: '+(inOB?'JA ⭐':'NEIN')+'<br>- 6-Zeiten: '+five+'<br>- BTC: '+state.btc.trend+' ('+state.btc.price.toFixed(0)+' $) | RSI '+state.btc.rsi.toFixed(1)+'<br>- VWAP: '+state.vwap.toFixed(dec(coin))+' $ ('+(price>state.vwap?'über':'unter')+')<br>- ATR: '+atr.toFixed(dec(coin))+' $<br>- Volumen: '+state.vol+' (x'+state.volRatio.toFixed(1)+')<br>- Divergenz: '+state.div+'<br>- Sweep: '+state.sweep+'<br>- Elliott: '+(state.elliott?state.elliott.welle:'KEIN ELLIOTT')+'<br>- Fibo: '+state.high.toFixed(dec(coin))+' / '+state.low.toFixed(dec(coin))+' $ | '+(inGold?'IN Golden Zone':'ausserhalb');
+ if(myEntry&&state.price){var pnl=(state.price-myEntry)/myEntry*100;$('myPnl').textContent='Dein Einstieg '+myEntry.toFixed(dec(coin))+' $ - Jetzt '+state.price.toFixed(dec(coin))+' $ = '+(pnl>=0?'+':'')+pnl.toFixed(2)+' %';}
+ }catch(e){ log('FEHLER in calc(): '+e.message); }
+}
+async function scanAll(){
+ try{
+ $('allBox').innerHTML='Scanne alle 25...';
+ var rows=[];
+ for(var ci=0;ci<COINS.length;ci++){var c=COINS[ci];
+  var r=await getKlines(c.s+'USDT','1d',86400,1000);
+  if(!r.data.length){rows.push('<tr><td><b>#'+c.rank+' '+c.s+'</b></td><td>-</td><td>Keine Daten</td></tr>');continue;}
+  var closes=[];for(var i2=0;i2<r.data.length;i2++)closes.push(r.data[i2].close);var rr=rsiCalc(closes,14);
+  var sw=findSwingSmart(r.data);var fib=calcFibo(sw.high,sw.low,sw.up);
+  var sig=closes[closes.length-1]>fib['0.382']?'BULLISCH':'BÄRISCH';
+  rows.push('<tr><td><b>#'+c.rank+' '+c.s+'</b><br><span style="color:#888">'+c.n+'</span></td><td>'+closes[closes.length-1].toFixed(dec(c.s))+' $</td><td>RSI '+rr.toFixed(1)+' - '+sig+' - via '+r.src+'</td></tr>');
+  await new Promise(function(res){setTimeout(res,120);});
+ }
+ $('allBox').innerHTML='<table><tr><th>Coin</th><th>Preis</th><th>RSI / Signal</th></tr>'+rows.join('')+'</table>';
+ }catch(e){ log('FEHLER scan: '+e.message); }
+}
+function startClock(){
+ if(timer)clearInterval(timer);
+ timer=setInterval(function(){countdown--;if(countdown<=0){countdown=TF_CONFIG[tf].cd;load();}
+ var m=Math.floor(countdown/60),s=countdown%60,hh=Math.floor(countdown/3600);
+ var dd=Math.floor(countdown/86400);
+ $('cd').textContent=countdown>=86400?dd+' T '+Math.floor((countdown%86400)/3600)+':'+String(Math.floor((countdown%3600)/60)).padStart(2,'0')+':'+String(s).padStart(2,'0'):countdown>=3600?hh+':'+String(Math.floor((countdown%3600)/60)).padStart(2,'0')+':'+String(s).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ },1000);
+}
+try{ markActive();syncHeads();startClock();calc();load(); }catch(e){ log('FEHLER Start: '+e.message); }
+</script>
+</body>
+</html>
